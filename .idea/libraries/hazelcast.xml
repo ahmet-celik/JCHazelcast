@@ -1,0 +1,24 @@
+<component name="libraryTable">
+  <library name="hazelcast">
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/../../hazelcast-hazelcast-a125307" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="file://$PROJECT_DIR$/../../hazelcast-hazelcast-a125307/hazelcast/src/main/java" />
+      <root url="file://$PROJECT_DIR$/../../hazelcast-hazelcast-a125307/hazelcast/src/test/java" />
+      <root url="file://$PROJECT_DIR$/../../hazelcast-hazelcast-a125307/hazelcast-all/src/main/java" />
+      <root url="file://$PROJECT_DIR$/../../hazelcast-hazelcast-a125307/hazelcast-client/src/main/java" />
+      <root url="file://$PROJECT_DIR$/../../hazelcast-hazelcast-a125307/hazelcast-client/src/test/java" />
+      <root url="file://$PROJECT_DIR$/../../hazelcast-hazelcast-a125307/hazelcast-cloud/src/main/java" />
+      <root url="file://$PROJECT_DIR$/../../hazelcast-hazelcast-a125307/hazelcast-cloud/src/test/java" />
+      <root url="file://$PROJECT_DIR$/../../hazelcast-hazelcast-a125307/hazelcast-hibernate/src/main/java" />
+      <root url="file://$PROJECT_DIR$/../../hazelcast-hazelcast-a125307/hazelcast-hibernate/src/test/java" />
+      <root url="file://$PROJECT_DIR$/../../hazelcast-hazelcast-a125307/hazelcast-ra/src/main/java" />
+      <root url="file://$PROJECT_DIR$/../../hazelcast-hazelcast-a125307/hazelcast-spring/src/main/java" />
+      <root url="file://$PROJECT_DIR$/../../hazelcast-hazelcast-a125307/hazelcast-spring/src/test/java" />
+      <root url="file://$PROJECT_DIR$/../../hazelcast-hazelcast-a125307/hazelcast-wm/src/main/java" />
+      <root url="file://$PROJECT_DIR$/../../hazelcast-hazelcast-a125307/hazelcast-wm/src/test/java" />
+    </SOURCES>
+  </library>
+</component>

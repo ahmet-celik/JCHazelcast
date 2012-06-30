@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/JavaClient.iml" filepath="$PROJECT_DIR$/JavaClient.iml" />
+      <module fileurl="file://$PROJECT_DIR$/hazelcast-java-client.iml" filepath="$PROJECT_DIR$/hazelcast-java-client.iml" />
     </modules>
   </component>
 </project>
