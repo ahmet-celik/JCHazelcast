@@ -33,7 +33,8 @@ public class JCListener implements  Runnable{
     }
 
     public void addMapListener(EntryListener listener,boolean includeValue) throws IOException, InterruptedException {
-        connection.sendOp("MADDLISTENER listener " + mapName + " " + includeValue + " " + false) ;
+        if(listeners.size()==0)
+            connection.sendOp("MADDLISTENER listener " + mapName + " " + includeValue + " " + false) ;
         listeners.add(listener);
 
     }
@@ -97,7 +98,6 @@ public class JCListener implements  Runnable{
              count = Integer.parseInt(split[split.length - 1].substring(1));
             if(count>0){
                 String sizeLine = connection.readLine();
-                System.out.println("before:"+sizeLine);
                 String[] tokens = sizeLine.split(" ");
                 System.out.println(sizeLine);
                 for (int i = 0; i < count; i++) {
@@ -109,7 +109,7 @@ public class JCListener implements  Runnable{
         }
         if(split[0].equals("EVENT")){
             String eventType = split[4];
-            boolean inc= (count <= 1);
+            boolean inc= (count > 1);
             if(inc){
                 if(eventType.equals("UPDATED")){
                     return new Event(split[4],split[3],inc,values.get(0),values.get(1),values.get(2));

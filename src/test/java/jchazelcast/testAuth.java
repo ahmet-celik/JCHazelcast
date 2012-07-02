@@ -29,11 +29,12 @@ public class testAuth {
     @Test
     public  void latestTest() throws IOException, InterruptedException {
         Listener ali = new Listener("ali");
-        //Listener veli = new Listener("veli");
+        Listener veli = new Listener("veli");
         JCMap map = JCHazelcast.getMap("ahmet");
         //JCMap map2 = JCHazelcast.getMap("mehmet");
         map.put("0",false,"mykey".getBytes(),"data1".getBytes());
         map.addListener(ali,true);
+        map.addListener(veli,true);
         map.put("1",false,"yourkey".getBytes(),"rand".getBytes());
         map.put("2",false,"mykey".getBytes(),"data2".getBytes());
         map.removeListener(ali);
