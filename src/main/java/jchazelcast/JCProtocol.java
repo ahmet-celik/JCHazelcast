@@ -5,7 +5,7 @@ public class JCProtocol {
     public static final int     DEFAULT_PORT        = 5701;
     public static final int     DEFAULT_TIMEOUT     = 0;
     public static final int     DEFAULT_TIMETOLIVE  = 0;
-
+    public static final int BUFFER_SIZE = 8192;
     public static final String  ID = "P01";
     public static final String  DEFAULT_HOST        = "localhost";
     public static final String  CHARSET = "UTF-8";

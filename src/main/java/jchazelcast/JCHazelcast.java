@@ -1,27 +1,40 @@
 package jchazelcast;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 
 public class JCHazelcast {
     private static Map<String,JCMap> mapHandlers;
-    private static JCConfig cf ;
+    private static List<JCConnection> connectionPool;
+    private final static int connectionCount = 2;
 
-    public JCHazelcast(JCConfig cf){
-        if(cf==null)
-            cf = cf;
-         if(mapHandlers==null)
-             mapHandlers = new HashMap<String, JCMap>();
+    public JCHazelcast(JCConfig cf) throws IOException, ClassNotFoundException {
+        init(cf);
     }
-    public JCHazelcast(){
-        if(cf==null)
-            cf = new JCConfig();
+
+    public JCHazelcast() throws IOException, ClassNotFoundException {
+        init(new JCConfig());
+    }
+
+    public void init(JCConfig jcConfig) throws IOException, ClassNotFoundException {
+        if(connectionPool==null) {
+            connectionPool = new LinkedList<JCConnection>();
+            for(int i=0;i<connectionCount;i++){
+                JCConnection connection = JCConnection.getConnection(jcConfig);
+                connection.connect();
+                if(!connection.auth("AUTH"+i,connection.getConfig().getUn(),connection.getConfig().getPw()))
+                    throw new IOException("wrong pass or username");
+                connectionPool.add(connection);
+            }
+        }
+
         if(mapHandlers==null)
             mapHandlers = new HashMap<String, JCMap>();
     }
-
+    public static JCConnection getCon(){
+        return connectionPool.remove(0);
+    }
     public static JCMap getMap(String name) throws IOException {
         JCMap map = mapHandlers.get(name);
         if(map==null){
@@ -33,12 +46,6 @@ public class JCHazelcast {
         }
     }
 
-    public static JCConfig getConfig() {
-        return cf;
-    }
-    public static void setConfig(JCConfig co){
-        cf=co;
-    }
     //    private void  sendOp(String commandLine,Map data) throws IOException {
 //        outputStream.write(commandLine.getBytes(CHARSET));
 //        outputStream.write(NUMBER_SIGN);

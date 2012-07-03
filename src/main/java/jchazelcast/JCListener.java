@@ -2,106 +2,119 @@ package jchazelcast;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.CountDownLatch;
 
 
-public class JCListener implements  Runnable{
-    private Set<EntryListener> listeners;
-    private String mapName;
-    private Thread listenThread;
-    private JCConnection connection;
-    private boolean stopListening;
+public class JCListener {
+    static Thread listenThread;
+    static JCConnection connection;
+    static boolean stopListening;
+    static  volatile CountDownLatch latch;
+    static  String response;
+    private JCListener()  {
 
-    public JCListener(String name) throws IOException {
-        this.connection =  JCConnection.getConnection();
-        this.mapName=name;
-        this.connection.connect();
-        if(!this.connection.auth("AUTH_JCListener",JCHazelcast.getConfig().getUn(),JCHazelcast.getConfig().getPw()))
-            throw new IOException("wrong pass or username");
-        listeners = new HashSet<EntryListener>();
+    }
+
+    static void init() throws IOException {
+        if(connection==null)
+            connection=JCHazelcast.getCon();
         stopListening = false;
-        listenThread = new Thread(this);
-        listenThread.start();
-
-    }
-
-    public int listenersSize(){
-        return listeners.size();
-    }
-
-    public void stopListening(){
-        stopListening =true;
-    }
-
-    public void addMapListener(EntryListener listener,boolean includeValue) throws IOException, InterruptedException {
-        if(listeners.size()==0)
-            connection.sendOp("MADDLISTENER listener " + mapName + " " + includeValue + " " + false) ;
-        listeners.add(listener);
-
-    }
-
-    public void removeMapListener(EntryListener listener) throws IOException {
-        listeners.remove(listener);
-        if(listeners.size()==0){
-            connection.sendOp("MREMOVELISTENER listener " + mapName + " " + false) ;
-        }
-    }
-
-
-    public void run()  {
-        while(!stopListening){
-            try {
-                if( connection.ready()){
-                    JCConnection.Response resp = readEventNResponse();
-                    if(resp instanceof Event)
-                        notifyEvent((Event) resp);
-                    else
-                        System.out.println("inthread response: "+resp);
+        if(listenThread==null){
+            listenThread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    while(!stopListening){
+                        try {
+                            if( connection.ready()){
+                                JCConnection.Response resp = readEventNResponse();
+                                if(resp instanceof Event)
+                                    notifyEvent((Event) resp);
+                                else{
+                                    response = resp.responseLine;
+                                    latch.countDown();
+                                }
+                            }
+                        } catch (IOException e) {
+                            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                        } catch (ClassNotFoundException e) {
+                            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                        }
+                    }
                 }
-            } catch (IOException e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
             }
+
+            );
+            listenThread.start();
         }
     }
 
-    public void notifyEvent(Event e){
+    static void stopListening() throws IOException {
+        stopListening =true;
+        connection.disconnect();
+    }
+
+    static boolean addMapListener(String mapName,boolean includeValue) throws IOException, InterruptedException {
+            latch = new CountDownLatch(1);
+            connection.sendOp("MADDLISTENER listener " + mapName + " " + includeValue + " " + false) ;
+           latch.await();
+           System.out.println(response);
+          return response.startsWith("OK");
+
+    }
+
+    static void removeMapListener(String mapName) throws IOException {
+            connection.sendOp("MREMOVELISTENER listener " + mapName + " " + false) ;
+    }
+
+
+
+
+
+    static void notifyEvent(Event e){
         if(e.type.equals("UPDATED")){
-                for(EntryListener each : listeners){
-                    each.onUpdated(e);
+                if(e.structure.equals("map")){
+                    for(EntryListener each : JCMap.listeners.get(e.name)){
+                        each.onUpdated(e);
+                    }
                 }
         }else if(e.type.equals("ADDED")){
-            for(EntryListener each : listeners){
-                each.onAdded(e);
+            if(e.structure.equals("map")){
+                for(EntryListener each : JCMap.listeners.get(e.name)){
+                    each.onAdded(e);
+                }
             }
         }else if(e.type.equals("REMOVED")){
-            for(EntryListener each : listeners){
-                each.onRemoved(e);
+            if(e.structure.equals("map")){
+                for(EntryListener each : JCMap.listeners.get(e.name)){
+                    each.onRemoved(e);
+                }
             }
         }else if(e.type.equals("EVICTED")){
-            for(EntryListener each : listeners){
-                each.onEvicted(e);
+            if(e.structure.equals("map")){
+                for(EntryListener each : JCMap.listeners.get(e.name)){
+                    each.onEvicted(e);
+                }
             }
         }else {
             throw new IllegalArgumentException("Unknown event type!");
         }
     }
 
-    public JCConnection.Response readEventNResponse() throws IOException, ClassNotFoundException {
+    static JCConnection.Response readEventNResponse() throws IOException, ClassNotFoundException {
         String responseLine = connection.readLine();
-        System.out.println("DEBUG::inthread "+responseLine);
+//        System.out.println("DEBUG::inthread "+responseLine);
         String[] split = responseLine.split(" ");
 
         int count=0;
-        List<String> values = new ArrayList<String>();
+        List<Object> values = new ArrayList<Object>();
         if ( split[split.length - 1].startsWith("#")) {
              count = Integer.parseInt(split[split.length - 1].substring(1));
             if(count>0){
                 String sizeLine = connection.readLine();
                 String[] tokens = sizeLine.split(" ");
-                System.out.println(sizeLine);
+//                System.out.println(sizeLine);
                 for (int i = 0; i < count; i++) {
-                    values.add((new String(connection.readData(Integer.parseInt(tokens[i])))));
+                    values.add(JCSerial.deserialize(connection.readData(Integer.parseInt(tokens[i]))));
                 }
                 connection.readData(2); //read CRLF
 
@@ -112,12 +125,12 @@ public class JCListener implements  Runnable{
             boolean inc= (count > 1);
             if(inc){
                 if(eventType.equals("UPDATED")){
-                    return new Event(split[4],split[3],inc,values.get(0),values.get(1),values.get(2));
+                    return new Event(split[4],split[3],split[2],inc,values.get(0),values.get(1),values.get(2));
                 }else{
-                    return new Event(split[4],split[3],inc,values.get(0),values.get(1));
+                    return new Event(split[4],split[3],split[2],inc,values.get(0),values.get(1));
                 }
             }else{
-                return new Event(split[4],split[3],inc,values.get(0));
+                return new Event(split[4],split[3],split[2],inc,values.get(0));
             }
         }
         return new JCConnection.Response(responseLine,values);

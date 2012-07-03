@@ -21,27 +21,37 @@ public class testAuth {
 
 
 
-    @Before
+   @Before
     public void connect() throws Exception {
         client = new JCHazelcast();
     }
 
     @Test
-    public  void latestTest() throws IOException, InterruptedException {
+    public  void latestTest() throws IOException, ClassNotFoundException, InterruptedException {
         Listener ali = new Listener("ali");
         Listener veli = new Listener("veli");
         JCMap map = JCHazelcast.getMap("ahmet");
         //JCMap map2 = JCHazelcast.getMap("mehmet");
-        map.put("0",false,"mykey".getBytes(),"data1".getBytes());
-        map.addListener(ali,true);
+        map.put("0",false,"mykey","data1");
+
+        map.get("2","mykey");
+        map.addListener(ali, true);
+        map.put("1", false, "yourkey", "rand");
         map.addListener(veli,true);
-        map.put("1",false,"yourkey".getBytes(),"rand".getBytes());
-        map.put("2",false,"mykey".getBytes(),"data2".getBytes());
+        map.put("2",false,"mykey","data2");
         map.removeListener(ali);
-        map.remove("3",false,"yourkey".getBytes());
+        map.remove("3",false,"yourkey");
+        map.get("4","mykey");
 
 
 
+    }
+
+    @Test
+    public void binaryTest() throws IOException, ClassNotFoundException {
+        byte[] b = JCSerial.serialize("ahmetç") ;
+        char[] c =   (new String(b)).toCharArray();
+        System.out.println(JCSerial.deserialize((new String(c)).getBytes("UTF-16")));
     }
 
     public static class Listener implements EntryListener{

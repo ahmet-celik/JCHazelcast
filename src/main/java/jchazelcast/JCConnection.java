@@ -1,9 +1,6 @@
 package jchazelcast;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -20,22 +17,31 @@ import static jchazelcast.JCProtocol.END_OF_LINE;
  * To change this template use File | Settings | File Templates.
  */
 public class JCConnection {
+    private String un;
+    private String pw;
     private String host ;
     private int port ;
     private Socket socket;
     private OutputStream outputStream;
-    private BufferedReader  inputStream;
+    private  byte buf[];
+    private int count, limit;
+    private InputStream inputStream;
     private int timeout = JCProtocol.DEFAULT_TIMEOUT;
-
 
     public void setConfig (JCConfig cf){
             host = cf.getHost();
             port = cf.getPort();
+            pw = cf.getPw();
+            un= cf.getUn();
     }
 
-    public static JCConnection  getConnection(){
+    public JCConfig getConfig(){
+        return new JCConfig(un,pw,host,port);
+    }
+
+    static JCConnection  getConnection(JCConfig cf){
         JCConnection jcConnection = new JCConnection();
-        jcConnection.setConfig(JCHazelcast.getConfig());
+        jcConnection.setConfig(cf);
         return jcConnection;
     }
 
@@ -50,18 +56,19 @@ public class JCConnection {
                 socket.connect(new InetSocketAddress(host, port), timeout);
                 socket.setSoTimeout(timeout);
                 outputStream = socket.getOutputStream();
-                inputStream = new  BufferedReader(new InputStreamReader(socket.getInputStream()));
+                inputStream = socket.getInputStream();
+                buf = new byte[JCProtocol.BUFFER_SIZE];
             } catch (IOException exception) {
                 throw new IOException(exception);
             }
         }
     }
 
-    public void disconnect() throws IOException{
+    void disconnect() throws IOException{
         if(isConnected()){
             try {
-                inputStream.close();
                 outputStream.close();
+                inputStream.close();
                 if (!socket.isClosed())
                     socket.close();
             } catch (IOException exception) {
@@ -70,26 +77,36 @@ public class JCConnection {
         }
     }
 
-    public boolean isConnected() {
+    boolean isConnected() {
         return socket != null && socket.isBound() && !socket.isClosed()  && socket.isConnected()
                 && !socket.isInputShutdown() && !socket.isOutputShutdown();
     }
 
-    public boolean auth(String flag,String username,String pass) throws IOException {
+    public boolean auth(String flag,String username,String pass) throws IOException, ClassNotFoundException {
         sendOp(JCProtocol.ID);
         sendOp("AUTH " + flag + " " + username + " " + pass);
         return readResponse().responseLine.equals("OK "+flag);
     }
 
-    protected void sendOp(String commandLine) throws IOException{
+    void sendOp(String commandLine) throws IOException{
         outputStream.write(commandLine.getBytes(CHARSET));
         outputStream.write(END_OF_LINE);
         outputStream.flush();
     }
-    protected boolean ready() throws IOException {
-        return inputStream.ready();
+
+    boolean ready() throws IOException {
+        return inputStream.available()>0;
     }
-    protected void sendOp(String commandLine,byte[]... data) throws IOException{
+    void sendOp(String commandLine,Object... objects) throws IOException {
+        int len = objects.length;
+        byte[][] data = new byte[len][];
+        for(int i=0;i<len;i++){
+           data[i]=JCSerial.serialize(objects[i]);
+        }
+        sendOp(commandLine,data);
+    }
+
+    void sendOp(String commandLine,byte[]... data) throws IOException{
         outputStream.write(commandLine.getBytes(CHARSET));
         outputStream.write('#');
         outputStream.write((""+data.length).getBytes());
@@ -107,20 +124,65 @@ public class JCConnection {
         outputStream.flush();
     }
 
-    protected  char[] readData(int size) throws IOException {
-        char[] aux = new char[size];
-        inputStream.read(aux);
-        return aux;
+    byte[] readData(int len) throws IOException {
+        byte[] b = new byte[len];
+        int remained =len;
+        while(remained!=0){
+            if (count == limit) {
+                fill();
+                if (limit == -1)
+                    return null;
+            }
+            int length = Math.min(limit - count, len);
+            System.arraycopy(buf, count, b, 0, length);
+            count += length;
+            remained-= length;
+        }
+        return b;
     }
 
-    protected  String readLine() throws IOException{
-        //while(!inputStream.ready());
-        return inputStream.readLine() ;
+     String readLine() throws IOException{
+         int b;
+         byte c;
+         StringBuilder sb = new StringBuilder();
+         while (true) {
+             if (count == limit) {
+                 fill();
+             }
+             if (limit == -1)
+                 break;
+
+             b = buf[count++];
+             if (b == '\r') {
+                 if (count == limit) {
+                     fill();
+                 }
+
+                 if (limit == -1) {
+                     sb.append((char) b);
+                     break;
+                 }
+                 c = buf[count++];
+                 if (c == '\n') {
+                     break;
+                 }
+                 sb.append((char) b);
+                 sb.append((char) c);
+             } else {
+                 sb.append((char) b);
+             }
+         }
+         return sb.toString();
     }
 
 
-    protected Response readResponse() throws IOException {
-        List<String> values = new ArrayList<String>();
+    private void fill() throws IOException {
+        limit = inputStream.read(buf);
+        count = 0;
+    }
+
+    Response readResponse() throws IOException, ClassNotFoundException {
+        List<Object> values = new ArrayList<Object>();
         String responseLine = readLine();
         String[] split = responseLine.split(" ");
         if ( split[split.length - 1].startsWith("#")) {
@@ -130,7 +192,7 @@ public class JCConnection {
                 String[] tokens = sizeLine.split(" ");
                 System.out.println(sizeLine);
                 for (int i = 0; i < count; i++) {
-                    values.add(new String(readData(Integer.parseInt(tokens[i]))));
+                    values.add(JCSerial.deserialize(readData(Integer.parseInt(tokens[i]))));
                 }
                 readData(2); //read CRLF
             }
@@ -139,9 +201,9 @@ public class JCConnection {
         return new Response(responseLine,values);
     }
 
-    public static class Response {
+    static class Response {
         String responseLine;
-        List<String> data;
+        List<Object> data;
         public Response(String responseLine){
             this.responseLine=responseLine;
             this.data = null;
