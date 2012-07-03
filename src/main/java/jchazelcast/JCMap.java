@@ -176,12 +176,24 @@ public class JCMap  {
 
     }
 
-    public void removeListener(EntryListener listener) throws  IOException, ClassNotFoundException {
+    public static int listenersSize(){
+        int sum=0;
+        for(Set s:listeners.values())
+            sum+=s.size();
+        return  sum;
+    }
+
+    public void removeListener(EntryListener listener) throws IOException, ClassNotFoundException, InterruptedException {
         if(JCMap.listeners.get(this.name)!=null) {
-            JCMap.listeners.get(this.name).remove(listener);
-            JCListener.removeMapListener(this.name);
+
+            if(JCMap.listeners.get(this.name).size()==1){
+                if(JCListener.removeMapListener(this.name))
+                   JCMap.listeners.get(this.name).remove(listener);
+            } else{
+                JCMap.listeners.get(this.name).remove(listener);
+            }
         }
-        if(JCMap.listeners.get(this.name).size()==0)
+        if(JCMap.listenersSize()==0)
             JCListener.stopListening();
 
     }

@@ -62,8 +62,12 @@ public class JCListener {
 
     }
 
-    static void removeMapListener(String mapName) throws IOException {
+    static boolean removeMapListener(String mapName) throws IOException, InterruptedException {
+        latch = new CountDownLatch(1);
             connection.sendOp("MREMOVELISTENER listener " + mapName + " " + false) ;
+        latch.await();
+        System.out.println(response);
+        return response.startsWith("OK");
     }
 
 
