@@ -27,7 +27,7 @@ public class JCMap  {
 
    public void put(String flag,long ttl,boolean noreply,Object key,Object data) throws IOException, ClassNotFoundException {
         connection.sendOp("MPUT " + flag + " " + name + " " + ttl + (noreply ? " noreply " : " "), key, data) ;
-        System.out.println(connection.readResponse());
+        connection.readResponse().responseLine.startsWith("OK");
     }
 
    public void putTransient(String flag,long ttl,boolean noreply,Object key,Object data) throws IOException, ClassNotFoundException  {

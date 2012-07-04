@@ -4,6 +4,9 @@ import com.hazelcast.core.Hazelcast;
 import org.junit.*;
 
 import java.io.IOException;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class testAuth {
 
@@ -34,7 +37,7 @@ public class testAuth {
         //JCMap map2 = JCHazelcast.getMap("mehmet");
         map.put("0",false,"mykey","data1");
 
-        map.get("2","mykey");
+        map.get("2", "mykey");
         map.addListener(ali, true);
         map.put("1", false, "yourkey", "rand");
         map.addListener(veli,true);
@@ -45,6 +48,26 @@ public class testAuth {
 
 
 
+    }
+
+    @Test
+    public void perf() throws IOException, InterruptedException,ClassNotFoundException {
+        JCMap map = JCHazelcast.getMap("ahmet");
+        map.put("flag",false, "1","istanbul");
+        Thread.sleep(2000);
+        final AtomicInteger c = new AtomicInteger(0);
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                int current = c.getAndSet(0);
+                System.out.println("* "+current + " ops per second");
+            }
+        }, 1000, 1000);
+        for (; ; ) {
+            map.put("flag",false, "1","istanbul");
+            c.incrementAndGet();
+        }
     }
 
     @Test

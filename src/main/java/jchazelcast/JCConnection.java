@@ -24,7 +24,7 @@ public class JCConnection {
     private Socket socket;
     private OutputStream outputStream;
     private  byte buf[];
-    private int count, limit;
+    private int current,max;
     private InputStream inputStream;
     private int timeout = JCProtocol.DEFAULT_TIMEOUT;
 
@@ -128,58 +128,54 @@ public class JCConnection {
         byte[] b = new byte[len];
         int remained =len;
         while(remained!=0){
-            if (count == limit) {
-                fill();
-                if (limit == -1)
+            if (current == max) {
+                readToBuf();
+                if (max == -1)
                     return null;
             }
-            int length = Math.min(limit - count, len);
-            System.arraycopy(buf, count, b, 0, length);
-            count += length;
+            int length = Math.min(max - current, remained);
+            System.arraycopy(buf, current, b, 0, length);
+            current += length;
             remained-= length;
         }
         return b;
     }
 
-     String readLine() throws IOException{
-         int b;
-         byte c;
-         StringBuilder sb = new StringBuilder();
-         while (true) {
-             if (count == limit) {
-                 fill();
-             }
-             if (limit == -1)
-                 break;
+    String readLine() throws IOException{
+        byte first,second;
+        StringBuilder line = new StringBuilder();
+        for(;;) {
+            if (current == max)
+                readToBuf();
+            if (max == -1)
+                break;
 
-             b = buf[count++];
-             if (b == '\r') {
-                 if (count == limit) {
-                     fill();
-                 }
+            first = buf[current++];
+            if (first == '\r') {
+                if (current == max)
+                    readToBuf();
 
-                 if (limit == -1) {
-                     sb.append((char) b);
-                     break;
-                 }
-                 c = buf[count++];
-                 if (c == '\n') {
-                     break;
-                 }
-                 sb.append((char) b);
-                 sb.append((char) c);
-             } else {
-                 sb.append((char) b);
-             }
-         }
-         return sb.toString();
+                if (max == -1) {
+                    line.append((char) first);
+                    break;
+                }
+                second = buf[current++];
+                if (second == '\n')
+                    break;
+                line.append((char) first).append((char) second);
+            } else
+                line.append((char) first);
+
+        }
+        return line.toString();
     }
 
 
-    private void fill() throws IOException {
-        limit = inputStream.read(buf);
-        count = 0;
+    private void readToBuf() throws IOException {
+        max = inputStream.read(buf);
+        current = 0;
     }
+
 
     Response readResponse() throws IOException, ClassNotFoundException {
         List<Object> values = new ArrayList<Object>();
@@ -190,7 +186,7 @@ public class JCConnection {
             if(count>0){
                 String sizeLine = readLine();
                 String[] tokens = sizeLine.split(" ");
-                System.out.println(sizeLine);
+
                 for (int i = 0; i < count; i++) {
                     values.add(JCSerial.deserialize(readData(Integer.parseInt(tokens[i]))));
                 }
