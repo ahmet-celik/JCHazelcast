@@ -1,7 +1,5 @@
 package jchazelcast;
 
-import java.util.ArrayList;
-
 
 public class Event<K,V>  extends JCConnection.Response {
     String type;
@@ -13,7 +11,7 @@ public class Event<K,V>  extends JCConnection.Response {
     V oldvalue;
 
     public Event(String type,String name,String structure, boolean iV,  K key) {
-        super("EVENT",new ArrayList());
+        super("EVENT");
         this.type = type;
         this.includeValue = iV;
         this.name = name;
@@ -22,7 +20,7 @@ public class Event<K,V>  extends JCConnection.Response {
     }
 
     public Event(String type, String name,String structure,boolean iV,  K key, V value) {
-        super("EVENT",new ArrayList());
+        super("EVENT");
         this.type = type;
         this.includeValue = iV;
         this.name = name;
@@ -32,7 +30,7 @@ public class Event<K,V>  extends JCConnection.Response {
     }
 
     public Event(String type,String name,String structure, boolean iV,  K key, V newvalue, V oldvalue) {
-        super("EVENT",new ArrayList());
+        super("EVENT");
         this.type = type;
         this.includeValue = iV;
         this.name = name;
