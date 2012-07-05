@@ -4,13 +4,12 @@ import com.hazelcast.core.Hazelcast;
 import org.junit.*;
 
 import java.io.IOException;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class testAuth {
-
-    public static JCHazelcast client;
+    public final static int NUM =  3;
+    public static ArrayList<JCHazelcast> clientPool=new ArrayList<JCHazelcast>();
 
     @BeforeClass
     public static void init() throws Exception {
@@ -26,33 +25,56 @@ public class testAuth {
 
    @Before
     public void connect() throws Exception {
-        client = new JCHazelcast();
+        for(int i=0;i<NUM;i++)
+            clientPool.add(new JCHazelcast());
     }
 
     @Test
     public  void latestTest() throws IOException, ClassNotFoundException, InterruptedException {
-        Listener ali = new Listener("ali");
-        Listener veli = new Listener("veli");
-        JCMap map = JCHazelcast.getMap("ahmet");
-        //JCMap map2 = JCHazelcast.getMap("mehmet");
-        map.put("0",false,"mykey","data1");
-
-        map.get("2", "mykey");
-        map.addListener(ali, true);
-        map.put("1", false, "yourkey", "rand");
-        map.addListener(veli,true);
-        map.put("2",false,"mykey","data2");
-        map.removeListener(ali);
-        map.remove("3",false,"yourkey");
-        map.get("4","mykey");
-
+        Map map = new HashMap();
+        map.put("key","data");
+        map.put("key2","data2");
+        map.put("key3","data3");
+        JCMap m = clientPool.get(0).getMap("ahmet");
+        System.out.println("result***"+m.putAll("putall", false, map));
+//        for(Object o: m.getAll("getall",map.keySet()).toArray())
+//            System.out.println(o);
+        System.out.println("result***"+m.put("put", false, "key3", "data4"));
 
 
     }
 
+    public static class MyListener extends JCMapListener{
+        String n;
+        MyListener(String name){
+              n=name;
+        }
+
+        @Override
+        public void entryUpdated(Event e) throws IOException, ClassNotFoundException, InterruptedException {
+            System.out.println(n+" listens(updated) "+e.getListenedStructureName()+" key: "+e.getKey()+" value: "+e.getValue());
+
+        }
+
+        @Override
+        public void entryAdded(Event e) {
+            System.out.println(n+" listens(added) "+e.getListenedStructureName()+" key: "+e.getKey()+" value: "+e.getValue());
+        }
+
+        @Override
+        public void entryRemoved(Event e) throws IOException, ClassNotFoundException, InterruptedException {
+                this.removeMapListener(e);
+        }
+
+        @Override
+        public void entryEvicted(Event e) {
+            //To change body of implemented methods use File | Settings | File Templates.
+        }
+    }
+
     @Test
     public void perf() throws IOException, InterruptedException,ClassNotFoundException {
-        JCMap map = JCHazelcast.getMap("ahmet");
+        JCMap map = clientPool.get(0).getMap("ahmet");
         map.put("flag",false, "1","istanbul");
         Thread.sleep(2000);
         final AtomicInteger c = new AtomicInteger(0);
@@ -77,31 +99,31 @@ public class testAuth {
         System.out.println(JCSerial.deserialize((new String(c)).getBytes("UTF-16")));
     }
 
-    public static class Listener implements EntryListener{
-        String name;
-        public Listener(String name){
-            this.name = name;
-        }
-        @Override
-        public void onUpdated(Event e) {
-            System.out.println(name+" listens(updated) "+e.name+" key: "+e.key+" value: "+e.newvalue);
-        }
-
-        @Override
-        public void onAdded(Event e) {
-            System.out.println(name+" listens(added) "+e.name+" key: "+e.key+" value: "+e.newvalue);
-        }
-
-        @Override
-        public void onRemoved(Event e) {
-            System.out.println(name+" listens(removed) "+e.name+" key: "+e.key+" value: "+e.newvalue);
-        }
-
-        @Override
-        public void onEvicted(Event e) {
-            System.out.println(name+" listens(evicted) "+e.name+" key: "+e.key+" value: "+e.newvalue);
-        }
-    }
+//    public static class Listener implements EntryListener{
+//        String name;
+//        public Listener(String name){
+//            this.name = name;
+//        }
+//        @Override
+//        public void onUpdated(Event e) {
+//            System.out.println(name+" listens(updated) "+e.name+" key: "+e.key+" value: "+e.newvalue);
+//        }
+//
+//        @Override
+//        public void onAdded(Event e) {
+//            System.out.println(name+" listens(added) "+e.name+" key: "+e.key+" value: "+e.newvalue);
+//        }
+//
+//        @Override
+//        public void onRemoved(Event e) {
+//            System.out.println(name+" listens(removed) "+e.name+" key: "+e.key+" value: "+e.newvalue);
+//        }
+//
+//        @Override
+//        public void onEvicted(Event e) {
+//            System.out.println(name+" listens(evicted) "+e.name+" key: "+e.key+" value: "+e.newvalue);
+//        }
+//    }
 //        client.mapPut("0", "default", false, "2".getBytes(), "mel".getBytes());
 //        client.mapSet("1","default",0,false,"2".getBytes(),"sel".getBytes());
 //        client.mapPutTransient("1","default", 100,false,"1".getBytes(),"fav".getBytes());

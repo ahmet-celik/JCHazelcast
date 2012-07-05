@@ -9,13 +9,7 @@ import java.util.List;
 import static jchazelcast.JCProtocol.CHARSET;
 import static jchazelcast.JCProtocol.END_OF_LINE;
 
-/**
- * Created with IntelliJ IDEA.
- * User: user
- * Date: 20.06.2012
- * Time: 15:35
- * To change this template use File | Settings | File Templates.
- */
+
 public class JCConnection {
     private String un;
     private String pw;
@@ -23,7 +17,7 @@ public class JCConnection {
     private int port ;
     private Socket socket;
     private OutputStream outputStream;
-    private  byte buf[];
+    private byte[] buf;
     private int current,max;
     private InputStream inputStream;
     private int timeout = JCProtocol.DEFAULT_TIMEOUT;
@@ -39,6 +33,8 @@ public class JCConnection {
         return new JCConfig(un,pw,host,port);
     }
 
+
+
     static JCConnection  getConnection(JCConfig cf){
         JCConnection jcConnection = new JCConnection();
         jcConnection.setConfig(cf);
@@ -46,7 +42,8 @@ public class JCConnection {
     }
 
 
-    public void connect() throws IOException {
+
+     void connect() throws IOException {
         if(!isConnected()){
             try {
                 socket = new Socket();
@@ -82,7 +79,7 @@ public class JCConnection {
                 && !socket.isInputShutdown() && !socket.isOutputShutdown();
     }
 
-    public boolean auth(String flag,String username,String pass) throws IOException, ClassNotFoundException {
+    boolean auth(String flag,String username,String pass) throws IOException, ClassNotFoundException {
         sendOp(JCProtocol.ID);
         sendOp("AUTH " + flag + " " + username + " " + pass);
         return readResponse().responseLine.equals("OK "+flag);
@@ -94,9 +91,6 @@ public class JCConnection {
         outputStream.flush();
     }
 
-    boolean ready() throws IOException {
-        return inputStream.available()>0;
-    }
     void sendOp(String commandLine,Object... objects) throws IOException {
         int len = objects.length;
         byte[][] data = new byte[len][];
@@ -124,24 +118,25 @@ public class JCConnection {
         outputStream.flush();
     }
 
-    byte[] readData(int len) throws IOException {
-        byte[] b = new byte[len];
+
+    private byte[] readData(int len) throws IOException {
+        byte[] buffer = new byte[len];
         int remained =len;
         while(remained!=0){
-            if (current == max) {
+            if (current == max)
                 readToBuf();
-                if (max == -1)
-                    return null;
-            }
+            if (max == -1)
+                return null;
+
             int length = Math.min(max - current, remained);
-            System.arraycopy(buf, current, b, 0, length);
+            System.arraycopy(buf, current, buffer, 0, length);
             current += length;
             remained-= length;
         }
-        return b;
+        return buffer;
     }
 
-    String readLine() throws IOException{
+    private String readLine() throws IOException{
         byte first,second;
         StringBuilder line = new StringBuilder();
         for(;;) {
@@ -177,43 +172,63 @@ public class JCConnection {
     }
 
 
-    Response readResponse() throws IOException, ClassNotFoundException {
-        List<Object> values = new ArrayList<Object>();
+//    Response readResponse() throws IOException, ClassNotFoundException {
+//        List<Object> values = new ArrayList<Object>();
+//        String responseLine = readLine();
+//        String[] split = responseLine.split(" ");
+//        if ( split[split.length - 1].startsWith("#")) {
+//            int count = Integer.parseInt(split[split.length - 1].substring(1));
+//            if(count>0){
+//                String sizeLine = readLine();
+//                String[] tokens = sizeLine.split(" ");
+//
+//                for (int i = 0; i < count; i++) {
+//                    values.add(JCSerial.deserialize(readData(Integer.parseInt(tokens[i]))));
+//                }
+//                readData(2); //read CRLF
+//            }
+//        }
+//
+//        return new Response(responseLine,values);
+//    }
+
+     public JCResponse readResponse() throws IOException, ClassNotFoundException {
+//        System.out.println("DEBUG::inthread "+responseLine);
         String responseLine = readLine();
         String[] split = responseLine.split(" ");
-        if ( split[split.length - 1].startsWith("#")) {
-            int count = Integer.parseInt(split[split.length - 1].substring(1));
-            if(count>0){
-                String sizeLine = readLine();
-                String[] tokens = sizeLine.split(" ");
 
+        int count=0;
+
+        List<Object> values = new ArrayList<Object>();
+        if ( split[split.length - 1].startsWith("#")) {
+            count = Integer.parseInt(split[split.length - 1].substring(1));
+            if(count>0){
+                String[] tokens = readLine().split(" ");
+//                System.out.println(sizeLine);
                 for (int i = 0; i < count; i++) {
                     values.add(JCSerial.deserialize(readData(Integer.parseInt(tokens[i]))));
                 }
                 readData(2); //read CRLF
+
             }
         }
-
-        return new Response(responseLine,values);
+        if(split[0].equals("EVENT")){
+            String eventType = split[4];
+            boolean inc= (count > 1);
+            if(inc){
+                if(eventType.equals("UPDATED")){
+                    return new Event(split[4],split[3],split[2],inc,values.get(0),values.get(1),values.get(2));
+                }else{
+                    return new Event(split[4],split[3],split[2],inc,values.get(0),values.get(1));
+                }
+            }else{
+                return new Event(split[4],split[3],split[2],inc,values.get(0));
+            }
+        }
+        return new JCResponse(responseLine,values);
     }
 
-    static class Response {
-        String responseLine;
-        List<Object> data;
-        public Response(String responseLine){
-            this.responseLine=responseLine;
-            this.data = null;
-        }
-        public Response(String responseLine,List data){
-            this.responseLine=responseLine;
-            this.data = data;
-        }
 
-        public String toString(){
-            return responseLine+"\r\n"+data;
-        }
-
-    }
 
 }
 

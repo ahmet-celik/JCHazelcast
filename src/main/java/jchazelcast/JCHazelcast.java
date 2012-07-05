@@ -5,9 +5,9 @@ import java.util.*;
 
 
 public class JCHazelcast {
-    private static Map<String,JCMap> mapHandlers;
-    private static List<JCConnection> connectionPool;
-    private final static int connectionCount = 2;
+    private  Map<String,JCMap> mapHandlers;
+    private  JCConnection connection;
+
 
     public JCHazelcast(JCConfig cf) throws IOException, ClassNotFoundException {
         init(cf);
@@ -18,33 +18,24 @@ public class JCHazelcast {
     }
 
     public void init(JCConfig jcConfig) throws IOException, ClassNotFoundException {
-        if(connectionPool==null) {
-            connectionPool = new LinkedList<JCConnection>();
-            for(int i=0;i<connectionCount;i++){
-                JCConnection connection = JCConnection.getConnection(jcConfig);
-                connection.connect();
-                if(!connection.auth("AUTH"+i,connection.getConfig().getUn(),connection.getConfig().getPw()))
-                    throw new IOException("wrong pass or username");
-                connectionPool.add(connection);
-            }
-        }
-
-        if(mapHandlers==null)
+            connection = JCConnection.getConnection(jcConfig);
+            connection.connect();
+            if(!connection.auth("AUTH_HZC",connection.getConfig().getUn(),connection.getConfig().getPw()))
+                  throw new IOException("wrong pass or username");
             mapHandlers = new HashMap<String, JCMap>();
     }
-    public static JCConnection getCon(){
-        return connectionPool.remove(0);
-    }
-    public static JCMap getMap(String name) throws IOException {
+
+    public JCMap getMap(String name) throws IOException {
         JCMap map = mapHandlers.get(name);
         if(map==null){
-            map = new JCMap(name);
+            map = new JCMap(name,connection);
             mapHandlers.put(name,map);
             return map;
-        }else{
+        }else
             return map;
-        }
+
     }
+
 
     //    private void  sendOp(String commandLine,Map data) throws IOException {
 //        outputStream.write(commandLine.getBytes(CHARSET));

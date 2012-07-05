@@ -1,206 +1,287 @@
 package jchazelcast;
 
+import com.hazelcast.core.MapEntry;
+
 import java.io.IOException;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class JCMap  {
-    static   Map<String,Set<EntryListener>> listeners;
     private String name;
-    private static JCConnection connection;
+    private JCConnection connection;
 
 
 
-    public JCMap(String name) throws IOException {
-        if(connection==null)
-            connection=JCHazelcast.getCon();
-        if(listeners==null)
-            listeners = new ConcurrentHashMap<String, Set<EntryListener>>();
+    JCMap(String name,JCConnection connection) throws IOException {
+        this.connection=connection;
         this.name       = name;
     }
 
-
-
-   public void put(String flag,boolean noreply,Object key,Object data) throws IOException, ClassNotFoundException {
-        put(flag, JCProtocol.DEFAULT_TIMETOLIVE, noreply, key, data);
+   public Object put(String flag,boolean noreply,Object key,Object data) throws IOException, ClassNotFoundException {
+        return put(flag, JCProtocol.DEFAULT_TIMETOLIVE, noreply, key, data);
     }
 
-   public void put(String flag,long ttl,boolean noreply,Object key,Object data) throws IOException, ClassNotFoundException {
-        connection.sendOp("MPUT " + flag + " " + name + " " + ttl + (noreply ? " noreply " : " "), key, data) ;
-        connection.readResponse().responseLine.startsWith("OK");
+   public Object put(String flag,long ttl,boolean noreply,Object key,Object data) throws IOException, ClassNotFoundException {
+       connection.sendOp("MPUT " + flag + " " + name + " " + ttl + (noreply ? " noreply " : " "), key, data) ;
+       if(!noreply){
+           JCResponse res= connection.readResponse();
+           if(res.responseLine.startsWith("OK"))
+               return res.data.get(0);
+           else
+               return null;
+       }else
+           return null;
+
     }
 
-   public void putTransient(String flag,long ttl,boolean noreply,Object key,Object data) throws IOException, ClassNotFoundException  {
+   public boolean putTransient(String flag,long ttl,boolean noreply,Object key,Object data) throws IOException, ClassNotFoundException  {
         connection.sendOp("MPUTTRANSIENT "+flag+" "+name+" "+ttl+  (noreply ? " noreply ":" "),key,data) ;
-        System.out.println(connection.readResponse());
+       return noreply ?false: connection.readResponse().responseLine.equals("OK "+flag) ;
+
     }
 
-   public void set(String flag,long ttl,boolean noreply,Object key,Object data) throws IOException, ClassNotFoundException {
+   public boolean set(String flag,long ttl,boolean noreply,Object key,Object data) throws IOException, ClassNotFoundException {
         connection.sendOp("MSET "+flag+" "+name+" "+ttl+  (noreply ? " noreply ":" "),key,data) ;
-        System.out.println(connection.readResponse());
+       return noreply ?false: connection.readResponse().responseLine.equals("OK "+flag) ;
+   }
+
+   public boolean tryPut(String flag,long timeout,Object key,Object data) throws IOException, ClassNotFoundException {
+       connection.sendOp("MTRYPUT "+flag+" "+name+" "+timeout+ " ",key,data) ;
+       String[] res =connection.readResponse().responseLine.split(" ");
+       if(res[0].equals("OK"))
+            return Boolean.valueOf(res[2]);
+       else
+           return false;
     }
 
-   public void tryPut(String flag,long timeout,Object key,Object data) throws IOException, ClassNotFoundException {
-        connection.sendOp("MTRYPUT "+flag+" "+name+" "+timeout+ " ",key,data) ;
-        System.out.println(connection.readResponse());
+    public boolean putAll(String flag,boolean noreply,Map map) throws IOException, ClassNotFoundException {
+        Object[] data = new Object[map.size()*2];
+        int i=0;
+        for(Object k:map.keySet()) {
+            data[i++]=k;
+            data[i++]=map.get(k);
+        }
+        return putAll(flag,noreply,data);
     }
 
-   public void putAll(String flag,boolean noreply,Object... data) throws IOException, ClassNotFoundException {
+   private boolean putAll(String flag,boolean noreply,Object... data) throws IOException, ClassNotFoundException {
         connection.sendOp("MPUTALL "+flag+" "+name+ (noreply ? " noreply ":" "),data) ;
-        System.out.println(connection.readResponse());
-    }
+       return noreply ?false: connection.readResponse().responseLine.equals("OK "+flag) ;
+   }
 
-   public void putAndUnlock(String flag,boolean noreply,Object key,Object data) throws IOException, ClassNotFoundException {
+   public boolean putAndUnlock(String flag,boolean noreply,Object key,Object data) throws IOException, ClassNotFoundException {
         connection.sendOp("MPUTANDUNLOCK " + flag + " " + name  + (noreply ? " noreply " : " "), key, data) ;
-        System.out.println(connection.readResponse());
-    }
+       return noreply ?false: connection.readResponse().responseLine.equals("OK "+flag) ;
+   }
 
-   public void tryLockAndGet(String flag,long timeout,Object key) throws IOException, ClassNotFoundException {
+   public Object tryLockAndGet(String flag,long timeout,Object key) throws IOException, ClassNotFoundException {
         connection.sendOp("MTRYLOCKANDGET "+flag+" "+name+" "+timeout+ " ",key) ;
-        System.out.println(connection.readResponse());
+        JCResponse res =   connection.readResponse();
+        if(res.responseLine.startsWith("OK"))
+            return res.data.get(0);
+        else
+           return null;
     }
 
-   public void get(String flag,Object key) throws IOException, ClassNotFoundException {
+   public Object get(String flag,Object key) throws IOException, ClassNotFoundException {
         connection.sendOp("MGET " + flag + " " + name + " " , key) ;
-        System.out.println(connection.readResponse());
+       JCResponse res =   connection.readResponse();
+       if(res.responseLine.startsWith("OK"))
+           return res.data.get(0);
+       else
+           return null;
     }
 
-   public void getAll(String flag,Object... keys) throws IOException, ClassNotFoundException {
+    public Collection<Object> getAll(String flag,Collection keys) throws IOException, ClassNotFoundException {
+        return getAll(flag,keys.toArray());
+    }
+
+   private Collection<Object> getAll(String flag,Object... keys) throws IOException, ClassNotFoundException {
         connection.sendOp("MGETALL " + flag + " " + name + " " , keys) ;
-        System.out.println(connection.readResponse());
+        JCResponse res =   connection.readResponse();
+        if(res.responseLine.startsWith("OK"))
+           return res.data;
+        else
+           return null;
     }
 
-   public void remove(String flag,boolean noreply,Object key) throws IOException, ClassNotFoundException {
+   public Object remove(String flag,boolean noreply,Object key) throws IOException, ClassNotFoundException {
         connection.sendOp("MREMOVE " + flag + " " + name + (noreply ? " noreply " : " ") , key) ;
-        System.out.println(connection.readResponse());
+       JCResponse res =   connection.readResponse();
+       if(!noreply){
+           if(res.responseLine.startsWith("OK"))
+               return res.data.get(0);
+           else
+               return null;
+       }else
+           return null;
     }
 
     //should return also #1 in response.
-   public void getEntry(String flag,Object key) throws IOException, ClassNotFoundException {
-        connection.sendOp("MGETENTRY " + flag + " " + name + " " , key) ;
-        System.out.println(connection.readResponse());
+   public MapEntry getEntry(String flag,Object key) throws IOException, ClassNotFoundException {
+       connection.sendOp("MGETENTRY " + flag + " " + name + " " , key) ;
+       JCResponse res =   connection.readResponse();
+       String[] split = res.responseLine.split(" ");
+       if(split[0].equals("OK") && split.length==10)
+          return new JCMapEntry(key,res.data.get(0),Long.valueOf(split[1]),Long.valueOf(split[2]),Long.valueOf(split[3]),Integer.valueOf(split[4]),Long.valueOf(split[5]),Long.valueOf(split[6]),Long.valueOf(split[7]),Long.valueOf(split[8]),Boolean.valueOf(split[9]));
+       else
+        return null;
     }
 
-   public void keySet(String flag,String type) throws IOException, ClassNotFoundException {
+   public Collection<Object> keySet(String flag,String type) throws IOException, ClassNotFoundException {
         connection.sendOp("KEYSET " + flag + " " + type + " "+name  ) ;
-        System.out.println(connection.readResponse());
+       JCResponse res =   connection.readResponse();
+       if(res.responseLine.startsWith("OK"))
+           return res.data;
+       else
+           return null;
     }
 
-   public void lock(String flag,long timeout,Object key) throws IOException, ClassNotFoundException {
+   public boolean lock(String flag,long timeout,Object key) throws IOException, ClassNotFoundException {
         connection.sendOp("MLOCK " + flag + " " + name + " "+timeout+" ",key  ) ;
-        System.out.println(connection.readResponse());
+        return connection.readResponse().responseLine.equals("OK "+flag);
     }
 
-   public void unlock(String flag,Object key) throws IOException, ClassNotFoundException {
+   public boolean unlock(String flag,Object key) throws IOException, ClassNotFoundException {
         connection.sendOp("MUNLOCK " + flag + " " + name + " ",key  ) ;
-        System.out.println(connection.readResponse());
+        return connection.readResponse().responseLine.equals("OK "+flag);
     }
 
-   public void tryLock(String flag,long timeout,Object key) throws IOException, ClassNotFoundException {
+   public boolean tryLock(String flag,long timeout,Object key) throws IOException, ClassNotFoundException {
         connection.sendOp("MTRYLOCK " + flag + " " + name + " "+timeout+" ",key  ) ;
-        System.out.println(connection.readResponse());
+        String[] res =connection.readResponse().responseLine.split(" ");
+        if(res[0].equals("OK"))
+           return Boolean.valueOf(res[2]);
+        else
+           return false;
     }
 
-   public void isKeyLocked(String flag,Object key) throws IOException, ClassNotFoundException {
+   public boolean isKeyLocked(String flag,Object key) throws IOException, ClassNotFoundException {
         connection.sendOp("MISKEYLOCKED " + flag + " " + name + " ",key  ) ;
-        System.out.println(connection.readResponse());
+        String[] res =connection.readResponse().responseLine.split(" ");
+        if(res[0].equals("OK"))
+           return Boolean.valueOf(res[2]);
+        else
+           return false;
     }
 
-   public void lockMap(String flag,long timeout) throws IOException, ClassNotFoundException {
+   public boolean lockMap(String flag,long timeout) throws IOException, ClassNotFoundException {
         connection.sendOp("MLOCKMAP " + flag + " "+name+" "+timeout ) ;
-        System.out.println(connection.readResponse());
+       String[] res =connection.readResponse().responseLine.split(" ");
+       if(res[0].equals("OK"))
+           return Boolean.valueOf(res[2]);
+       else
+           return false;
     }
 
-   public void unlockMap(String flag,long timeout) throws IOException, ClassNotFoundException {
+   public boolean unlockMap(String flag,long timeout) throws IOException, ClassNotFoundException {
         connection.sendOp("MUNLOCKMAP " + flag + " "+name+" "+timeout ) ;
-        System.out.println(connection.readResponse());
+        return connection.readResponse().responseLine.equals("OK "+flag);
     }
 
-   public void forceUnlock(String flag,Object key) throws IOException, ClassNotFoundException {
+   public boolean forceUnlock(String flag,Object key) throws IOException, ClassNotFoundException {
         connection.sendOp("MFORCEUNLOCK " + flag + " " + name + " ",key  ) ;
-        System.out.println(connection.readResponse());
+        return connection.readResponse().responseLine.equals("OK "+flag);
     }
 
-   public void containsKey(String flag,Object key) throws IOException, ClassNotFoundException {
+   public boolean containsKey(String flag,Object key) throws IOException, ClassNotFoundException {
         connection.sendOp("MCONTAINSKEY " + flag + " " + name + " map ",key  ) ;
-        System.out.println(connection.readResponse());
+       String[] res =connection.readResponse().responseLine.split(" ");
+       if(res[0].equals("OK"))
+           return Boolean.valueOf(res[2]);
+       else
+           return false;
     }
 
-   public void containsValue(String flag,Object value) throws IOException, ClassNotFoundException {
+   public boolean containsValue(String flag,Object value) throws IOException, ClassNotFoundException {
         connection.sendOp("MCONTAINSVALUE " + flag + " " + name + " map ",value  ) ;
-        System.out.println(connection.readResponse());
+       String[] res =connection.readResponse().responseLine.split(" ");
+       if(res[0].equals("OK"))
+           return Boolean.valueOf(res[2]);
+       else
+           return false;
     }
 
-   public void putIfAbsent(String flag,boolean noreply,Object key,Object data) throws IOException, ClassNotFoundException  {
-        putIfAbsent(flag, JCProtocol.DEFAULT_TIMETOLIVE, noreply, key, data);
+   public Object putIfAbsent(String flag,boolean noreply,Object key,Object data) throws IOException, ClassNotFoundException  {
+        return putIfAbsent(flag, JCProtocol.DEFAULT_TIMETOLIVE, noreply, key, data);
     }
 
-   public void putIfAbsent(String flag,long ttl,boolean noreply,Object key,Object data) throws IOException, ClassNotFoundException  {
+   public Object putIfAbsent(String flag,long ttl,boolean noreply,Object key,Object data) throws IOException, ClassNotFoundException  {
         connection.sendOp("MPUTIFABSENT " + flag + " " + name + " " + ttl + (noreply ? " noreply " : " "), key, data) ;
-        System.out.println(connection.readResponse());
+        if(!noreply){
+           JCResponse res= connection.readResponse();
+           if(res.responseLine.startsWith("OK"))
+               return res.data.get(0);
+           else
+               return null;
+        }else
+           return null;
     }
 
-   public void removeIfSame(String flag,boolean noreply,Object key,Object data) throws IOException, ClassNotFoundException  {
+   public boolean removeIfSame(String flag,boolean noreply,Object key,Object data) throws IOException, ClassNotFoundException  {
         connection.sendOp("MREMOVEIFSAME " + flag + " " + name +  (noreply ? " noreply " : " "), key, data) ;
-        System.out.println(connection.readResponse());
+       if(!noreply){
+            String[] res =connection.readResponse().responseLine.split(" ");
+            if(res[0].equals("OK"))
+               return Boolean.valueOf(res[2]);
+            else
+               return false;
+       }else
+           return false;
     }
 
-   public void replaceIfNotNull(String flag,boolean noreply,Object key,Object data) throws IOException, ClassNotFoundException  {
+   public Object replaceIfNotNull(String flag,boolean noreply,Object key,Object data) throws IOException, ClassNotFoundException  {
         connection.sendOp("MREPLACEIFNOTNULL " + flag + " " + name +  (noreply ? " noreply " : " "), key, data) ;
-        System.out.println(connection.readResponse());
+       if(!noreply){
+           JCResponse res= connection.readResponse();
+           if(res.responseLine.startsWith("OK"))
+               return res.data.get(0);
+           else
+               return null;
+       }else
+           return null;
     }
 
-   public void replaceIfSame(String flag,boolean noreply,Object key,Object old_data,Object new_data) throws IOException, ClassNotFoundException  {
+   public boolean replaceIfSame(String flag,boolean noreply,Object key,Object old_data,Object new_data) throws IOException, ClassNotFoundException  {
         connection.sendOp("MREPLACEIFSAME " + flag + " " + name +  (noreply ? " noreply " : " "), key, old_data,new_data) ;
-        System.out.println(connection.readResponse());
+       if(!noreply){
+           String[] res =connection.readResponse().responseLine.split(" ");
+           if(res[0].equals("OK"))
+               return Boolean.valueOf(res[2]);
+           else
+               return false;
+       }else
+           return false;
     }
 
-   public void flush(String flag,boolean noreply) throws IOException, ClassNotFoundException {
+   public boolean flush(String flag,boolean noreply) throws IOException, ClassNotFoundException {
         connection.sendOp("MFLUSH " + flag + " "+name+ (noreply ? " noreply " : " ") ) ;
-        System.out.println(connection.readResponse());
+        return noreply ?false: connection.readResponse().responseLine.equals("OK "+flag) ;
     }
 
-   public void evict(String flag,boolean noreply,Object key) throws IOException, ClassNotFoundException {
+   public boolean evict(String flag,boolean noreply,Object key) throws IOException, ClassNotFoundException {
         connection.sendOp("MEVICT " + flag + " " + name + (noreply ? " noreply " : " "),key  ) ;
-        System.out.println(connection.readResponse());
+       if(!noreply){
+           String[] res =connection.readResponse().responseLine.split(" ");
+           if(res[0].equals("OK"))
+               return Boolean.valueOf(res[2]);
+           else
+               return false;
+       }else
+           return false;
     }
 
-    public void addListener(EntryListener listener,boolean inc) throws IOException, ClassNotFoundException , InterruptedException {
+    public void addMapListenerAndStartListen(JCMapListener listener,boolean inc) throws IOException, ClassNotFoundException , InterruptedException {
 //        connection.sendOp("MADDLISTENER " + flag + " " + name + " "+inc_value+(noreply ? " noreply " : " "),key  ) ;
-//        System.out.println(connection.readResponse());
-        JCListener.init();
-        if(JCMap.listeners.get(this.name)==null)
-            JCMap.listeners.put(this.name,Collections.newSetFromMap(new ConcurrentHashMap<EntryListener, Boolean>()));
-        if(JCListener.addMapListener(this.name,inc))
-            JCMap.listeners.get(this.name).add(listener) ;
+//        return connection.readResponse().responseLine.equals("OK "+flag);
+          listener.addMapListener(this.name,inc,this.connection);
 
     }
 
-    public static int listenersSize(){
-        int sum=0;
-        for(Set s:listeners.values())
-            sum+=s.size();
-        return  sum;
-    }
 
-    public void removeListener(EntryListener listener) throws IOException, ClassNotFoundException, InterruptedException {
-        if(JCMap.listeners.get(this.name)!=null) {
-
-            if(JCMap.listeners.get(this.name).size()==1){
-                if(JCListener.removeMapListener(this.name))
-                   JCMap.listeners.get(this.name).remove(listener);
-            } else{
-                JCMap.listeners.get(this.name).remove(listener);
-            }
-        }
-        if(JCMap.listenersSize()==0)
-            JCListener.stopListening();
-
-    }
 
 //    private void mapAddListener(String flag,boolean inc_value,boolean noreply) throws IOException, ClassNotFoundException {
 //        connection.sendOp("MADDLISTENER " + flag + " " + name + " "+inc_value+(noreply ? " noreply " : " ") ) ;
-//        System.out.println(connection.readResponse());
+//        return connection.readResponse().responseLine.startsWith("OK");
 //    }
 
 
