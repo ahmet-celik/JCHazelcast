@@ -100,7 +100,7 @@ public class JCConnection {
         int len = objects.length;
         byte[][] data = new byte[len][];
         for(int i=0;i<len;i++){
-           data[i]=JCSerial.serialize((String) objects[i]);
+           data[i]=JCSerial.serialize(objects[i]);
         }
         sendOp(commandLine,data);
     }

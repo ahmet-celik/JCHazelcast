@@ -9,7 +9,7 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class testAuth {
-    public final static int NUM =  3;
+    public final static int NUM =  2;
     public static ArrayList<JCHazelcast> clientPool=new ArrayList<JCHazelcast>();
 
     @BeforeClass
@@ -129,6 +129,8 @@ public class testAuth {
         System.out.println(JCSerial.deserialize((new String(c)).getBytes("UTF-16")));
     }
 
+
+    //seems OK.
     @Test
     public  void atomicTest(){
        JCAtomicNumber a1 = clientPool.get(0).getAtomicNumber("1");
@@ -143,6 +145,61 @@ public class testAuth {
         System.out.println(a2.addAndGet("5", 10));
     }
 
+    //could not test error in server.
+    @Test
+   public void multiMapTest(){
+        JCMultiMap<Integer,String> mm1= clientPool.get(0).getMultiMap("mm1");
+
+        System.out.println(mm1.put("0",false,18,"ali"));
+        System.out.println(mm1.put("1",false,18,"selen"));
+        System.out.println(mm1.put("2",false,21,"ali"));
+        System.out.println(mm1.valueCount("3",18));
+        System.out.println(mm1.removeValue("4",false,18,"selen"));
+        System.out.println(mm1.valueCount("5",18));
+        System.out.println(mm1.removeKey("6",false,21));
+        System.out.println(mm1.valueCount("7",21));
+    }
+
+    @Test
+    public void idTest(){
+        JCIDGenerator gen = clientPool.get(0).getIDGenerator("d");
+        System.out.println(gen.newID("3"));
+        System.out.println(gen.newID("3"));
+        System.out.println(gen.newID("3"));
+    }
+
+    //does not work.
+    @Test
+    public void cdl(){
+        JCCountDownLatch cdl = clientPool.get(0).getCountDownLatch("l");
+        final JCCountDownLatch cdl2 = clientPool.get(1).getCountDownLatch("l");
+        System.out.println("set "+cdl.setCount("3",2));
+        System.out.println("get " + cdl.getCount("0"));
+        (new Thread(new Runnable() {
+            @Override
+            public void run() {
+                System.out.println("in "+cdl2.await("fl",5000));
+                System.out.println("Now! It is time to ...");
+            }
+        })).start();
+        System.out.println("dec " + cdl.countDown("2"));
+        System.out.println("get "+cdl.getCount("0"));
+        System.out.println("dec "+cdl.countDown("2"));
+
+    }
+
+
+    //gives errors.
+    @Test
+    public void locks(){
+        JCLock lk = clientPool.get(0).getLock("2");
+        System.out.println(lk.lock("1"));
+        System.out.println(lk.isLocked("2"));
+        System.out.println(lk.unlock("3"));
+        System.out.println(lk.isLocked("4"));
+        System.out.println(lk.lock("5"));
+        System.out.println(lk.forceUnlock("1"));
+    }
 //    public static class Listener implements EntryListener{
 //        String name;
 //        public Listener(String name){

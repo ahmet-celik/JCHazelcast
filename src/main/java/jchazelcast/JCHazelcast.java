@@ -94,6 +94,33 @@ public class JCHazelcast{
         return  (JCAtomicNumber) getStruct(JCStruct.Type.ATOMICNUMBER,name);
     }
 
+    /**
+     * Returns IDGenerator from cluster with this name
+     * @param name
+     * @return
+     */
+    public JCIDGenerator getIDGenerator(String name){
+        return (JCIDGenerator) getStruct(JCStruct.Type.IDGENERATOR,name);
+    }
+
+    /**
+     * Return CountDownLatch from cluster with this name
+     * @param name
+     * @return
+     */
+    public JCCountDownLatch getCountDownLatch(String name){
+        return (JCCountDownLatch) getStruct(JCStruct.Type.COUNTDOWNLATCH,name);
+    }
+
+    /**
+     * Return Lock from cluster with this name
+     * @param name
+     * @return
+     */
+    public JCLock getLock(String name){
+        return (JCLock) getStruct(JCStruct.Type.LOCK,name);
+    }
+
 
     private JCStruct getStruct(JCStruct.Type type,String name){
            JCStruct struct = structHandlers.get(type.ordinal()).get(name);
@@ -105,9 +132,9 @@ public class JCHazelcast{
                    case MULTIMAP: struct = new JCMultiMap(name,connection); break;
                    //case TOPIC: struct = new JCTopic(name,connection); break;
                    case ATOMICNUMBER: struct = new JCAtomicNumber(name,connection); break;
-                  // case IDGENERATOR: struct = new JCIDGenerator(name,connection); break;
-                   //case COUNTDOWNLATCH: struct = new JCCountDownLatch(name,connection); break;
-                   //case LOCK: struct = new JCLock(name,connection); break;
+                   case IDGENERATOR: struct = new JCIDGenerator(name,connection); break;
+                   case COUNTDOWNLATCH: struct = new JCCountDownLatch(name,connection); break;
+                   case LOCK: struct = new JCLock(name,connection); break;
                }
                structHandlers.get(type.ordinal()).put(name,struct);
                return struct;
