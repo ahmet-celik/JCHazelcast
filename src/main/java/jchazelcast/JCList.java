@@ -1,12 +1,7 @@
 package jchazelcast;
 
-/**
- * Created with IntelliJ IDEA.
- * User: user
- * Date: 09.07.2012
- * Time: 12:09
- * To change this template use File | Settings | File Templates.
- */
+
+
 public class JCList<V> extends JCStruct{
 
     JCList(String name, JCConnection connection) {

@@ -2,13 +2,17 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="969a7a9a-8abf-447e-ba12-0e64e6aed937" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/jchazelcast/JCCountDownLatch.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/jchazelcast/JCIDGenerator.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/jchazelcast/JCLock.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/jchazelcast/JCAtomicNumber.java" afterPath="$PROJECT_DIR$/src/main/java/jchazelcast/JCAtomicNumber.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/jchazelcast/JCConnection.java" afterPath="$PROJECT_DIR$/src/main/java/jchazelcast/JCConnection.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/jchazelcast/JCCountDownLatch.java" afterPath="$PROJECT_DIR$/src/main/java/jchazelcast/JCCountDownLatch.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/jchazelcast/JCHazelcast.java" afterPath="$PROJECT_DIR$/src/main/java/jchazelcast/JCHazelcast.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/jchazelcast/JCList.java" afterPath="$PROJECT_DIR$/src/main/java/jchazelcast/JCList.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/jchazelcast/JCLock.java" afterPath="$PROJECT_DIR$/src/main/java/jchazelcast/JCLock.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/jchazelcast/JCMapEntry.java" afterPath="$PROJECT_DIR$/src/main/java/jchazelcast/JCMapEntry.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/jchazelcast/JCMultiMap.java" afterPath="$PROJECT_DIR$/src/main/java/jchazelcast/JCMultiMap.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/jchazelcast/JCResponse.java" afterPath="$PROJECT_DIR$/src/main/java/jchazelcast/JCResponse.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/jchazelcast/JCStruct.java" afterPath="$PROJECT_DIR$/src/main/java/jchazelcast/JCStruct.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/java/jchazelcast/testAuth.java" afterPath="$PROJECT_DIR$/src/test/java/jchazelcast/testAuth.java" />
     </list>
     <ignored path="JavaClient.iws" />
@@ -28,7 +32,7 @@
   </component>
   <component name="DebuggerManager">
     <line_breakpoints>
-      <breakpoint url="file://$PROJECT_DIR$/src/test/java/jchazelcast/testAuth.java" line="41" class="jchazelcast.testAuth" package="jchazelcast">
+      <breakpoint url="file://$PROJECT_DIR$/src/test/java/jchazelcast/testAuth.java" line="37" class="jchazelcast.testAuth" package="jchazelcast">
         <option name="ENABLED" value="true" />
         <option name="LOG_ENABLED" value="false" />
         <option name="LOG_EXPRESSION_ENABLED" value="false" />
@@ -41,7 +45,20 @@
         <option name="CONDITION" value="" />
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
-      <breakpoint url="file://$PROJECT_DIR$/src/test/java/jchazelcast/testAuth.java" line="175" class="jchazelcast.testAuth" package="jchazelcast">
+      <breakpoint url="file://$PROJECT_DIR$/src/test/java/jchazelcast/testAuth.java" line="205" class="jchazelcast.testAuth" package="jchazelcast">
+        <option name="ENABLED" value="true" />
+        <option name="LOG_ENABLED" value="false" />
+        <option name="LOG_EXPRESSION_ENABLED" value="false" />
+        <option name="SUSPEND_POLICY" value="SuspendAll" />
+        <option name="COUNT_FILTER_ENABLED" value="false" />
+        <option name="COUNT_FILTER" value="0" />
+        <option name="CONDITION_ENABLED" value="false" />
+        <option name="CLASS_FILTERS_ENABLED" value="false" />
+        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
+        <option name="CONDITION" value="" />
+        <option name="LOG_MESSAGE" value="" />
+      </breakpoint>
+      <breakpoint url="file://$PROJECT_DIR$/src/main/java/jchazelcast/JCConnection.java" line="194" class="jchazelcast.JCConnection" package="jchazelcast">
         <option name="ENABLED" value="true" />
         <option name="LOG_ENABLED" value="false" />
         <option name="LOG_EXPRESSION_ENABLED" value="false" />
@@ -95,76 +112,31 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="JCMultiMap.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/jchazelcast/JCMultiMap.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="53" column="9" selection-start="1685" selection-end="1685" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="JCHazelcast.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/jchazelcast/JCHazelcast.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="115" column="46" selection-start="3087" selection-end="3087" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="JCCountDownLatch.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/jchazelcast/JCCountDownLatch.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="33" column="31" selection-start="948" selection-end="948" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="testAuth.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/test/java/jchazelcast/testAuth.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="191" column="19" selection-start="6158" selection-end="6158" vertical-scroll-proportion="1.3384956">
+            <state line="81" column="36" selection-start="2315" selection-end="2315" vertical-scroll-proportion="1.9282701">
               <folding>
-                <element signature="e#5731#5952#0" expanded="true" />
-                <element signature="e#5941#5942#0" expanded="true" />
+                <element signature="e#1843#2079#0" expanded="true" />
+                <element signature="e#2068#2069#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="JCLock.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/jchazelcast/JCLock.java">
+      <file leaf-file-name="JCMap.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/jchazelcast/JCMap.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="50" column="36" selection-start="1460" selection-end="1460" vertical-scroll-proportion="0.0">
+            <state line="461" column="0" selection-start="17826" selection-end="17826" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="JCIDGenerator.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/jchazelcast/JCIDGenerator.java">
+      <file leaf-file-name="JCListener.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/jchazelcast/JCListener.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="9" column="47" selection-start="221" selection-end="221" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="JCResponse.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/jchazelcast/JCResponse.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="35" column="0" selection-start="890" selection-end="890" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="JCAtomicNumber.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/jchazelcast/JCAtomicNumber.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="44" column="50" selection-start="1379" selection-end="1379" vertical-scroll-proportion="0.0">
+            <state line="9" column="0" selection-start="206" selection-end="206" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -173,16 +145,25 @@
       <file leaf-file-name="JCConnection.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/jchazelcast/JCConnection.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="211" column="0" selection-start="6284" selection-end="6284" vertical-scroll-proportion="0.0">
+            <state line="208" column="35" selection-start="6281" selection-end="6281" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="JCStruct.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/jchazelcast/JCStruct.java">
+      <file leaf-file-name="JCHazelcast.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/jchazelcast/JCHazelcast.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="22" column="0" selection-start="512" selection-end="512" vertical-scroll-proportion="0.0">
+            <state line="45" column="0" selection-start="1225" selection-end="1225" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="JCMapListener.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/jchazelcast/JCMapListener.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="20" column="0" selection-start="702" selection-end="702" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -214,21 +195,21 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/src/main/java/jchazelcast/JCDataStructure.java" />
         <option value="$PROJECT_DIR$/src/main/java/jchazelcast/JCMapListener.java" />
         <option value="$PROJECT_DIR$/src/main/java/jchazelcast/JCListener.java" />
         <option value="$PROJECT_DIR$/src/main/java/jchazelcast/JCSet.java" />
-        <option value="$PROJECT_DIR$/src/main/java/jchazelcast/JCStruct.java" />
-        <option value="$PROJECT_DIR$/src/main/java/jchazelcast/JCAtomicNumber.java" />
-        <option value="$PROJECT_DIR$/src/main/java/jchazelcast/JCResponse.java" />
         <option value="$PROJECT_DIR$/src/main/java/jchazelcast/JCMap.java" />
-        <option value="$PROJECT_DIR$/src/main/java/jchazelcast/JCList.java" />
-        <option value="$PROJECT_DIR$/src/main/java/jchazelcast/JCMultiMap.java" />
-        <option value="$PROJECT_DIR$/src/main/java/jchazelcast/JCConnection.java" />
         <option value="$PROJECT_DIR$/src/main/java/jchazelcast/JCIDGenerator.java" />
+        <option value="$PROJECT_DIR$/src/main/java/jchazelcast/JCConnection.java" />
+        <option value="$PROJECT_DIR$/src/main/java/jchazelcast/JCAtomicNumber.java" />
+        <option value="$PROJECT_DIR$/src/main/java/jchazelcast/JCStruct.java" />
+        <option value="$PROJECT_DIR$/src/main/java/jchazelcast/JCLock.java" />
         <option value="$PROJECT_DIR$/src/main/java/jchazelcast/JCCountDownLatch.java" />
         <option value="$PROJECT_DIR$/src/main/java/jchazelcast/JCHazelcast.java" />
-        <option value="$PROJECT_DIR$/src/main/java/jchazelcast/JCLock.java" />
+        <option value="$PROJECT_DIR$/src/main/java/jchazelcast/JCMultiMap.java" />
+        <option value="$PROJECT_DIR$/src/main/java/jchazelcast/JCResponse.java" />
+        <option value="$PROJECT_DIR$/src/main/java/jchazelcast/JCList.java" />
+        <option value="$PROJECT_DIR$/src/main/java/jchazelcast/JCMapEntry.java" />
         <option value="$PROJECT_DIR$/src/test/java/jchazelcast/testAuth.java" />
       </list>
     </option>
@@ -446,29 +427,7 @@
       <recent name="jchazelcast" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.testAuth.locks">
-    <configuration default="false" name="testAuth.perf2" type="JUnit" factoryName="JUnit" temporary="true">
-      <module name="hazelcast-java-client" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PACKAGE_NAME" value="jchazelcast" />
-      <option name="MAIN_CLASS_NAME" value="jchazelcast.testAuth" />
-      <option name="METHOD_NAME" value="perf2" />
-      <option name="TEST_OBJECT" value="method" />
-      <option name="VM_PARAMETERS" value="-ea" />
-      <option name="PARAMETERS" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="ENV_VARIABLES" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <option name="TEST_SEARCH_SCOPE">
-        <value defaultName="moduleWithDependencies" />
-      </option>
-      <envs />
-      <patterns />
-      <RunnerSettings RunnerId="Run" />
-      <ConfigurationWrapper RunnerId="Run" />
-      <method />
-    </configuration>
+  <component name="RunManager" selected="JUnit.testAuth.listenerTest">
     <configuration default="false" name="testAuth.multiMapTest" type="JUnit" factoryName="JUnit" temporary="true">
       <module name="hazelcast-java-client" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
@@ -560,6 +519,34 @@
       <envs />
       <patterns />
       <RunnerSettings RunnerId="Run" />
+      <ConfigurationWrapper RunnerId="Run" />
+      <method />
+    </configuration>
+    <configuration default="false" name="testAuth.listenerTest" type="JUnit" factoryName="JUnit" temporary="true">
+      <module name="hazelcast-java-client" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" value="jchazelcast" />
+      <option name="MAIN_CLASS_NAME" value="jchazelcast.testAuth" />
+      <option name="METHOD_NAME" value="listenerTest" />
+      <option name="TEST_OBJECT" value="method" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="moduleWithDependencies" />
+      </option>
+      <envs />
+      <patterns />
+      <RunnerSettings RunnerId="Debug">
+        <option name="DEBUG_PORT" value="" />
+        <option name="TRANSPORT" value="0" />
+        <option name="LOCAL" value="true" />
+      </RunnerSettings>
+      <RunnerSettings RunnerId="Run" />
+      <ConfigurationWrapper RunnerId="Debug" />
       <ConfigurationWrapper RunnerId="Run" />
       <method />
     </configuration>
@@ -681,11 +668,11 @@
       </method>
     </configuration>
     <list size="5">
-      <item index="0" class="java.lang.String" itemvalue="JUnit.testAuth.perf2" />
-      <item index="1" class="java.lang.String" itemvalue="JUnit.testAuth.multiMapTest" />
-      <item index="2" class="java.lang.String" itemvalue="JUnit.testAuth.idTest" />
-      <item index="3" class="java.lang.String" itemvalue="JUnit.testAuth.cdl" />
-      <item index="4" class="java.lang.String" itemvalue="JUnit.testAuth.locks" />
+      <item index="0" class="java.lang.String" itemvalue="JUnit.testAuth.multiMapTest" />
+      <item index="1" class="java.lang.String" itemvalue="JUnit.testAuth.idTest" />
+      <item index="2" class="java.lang.String" itemvalue="JUnit.testAuth.cdl" />
+      <item index="3" class="java.lang.String" itemvalue="JUnit.testAuth.locks" />
+      <item index="4" class="java.lang.String" itemvalue="JUnit.testAuth.listenerTest" />
     </list>
     <configuration name="&lt;template&gt;" type="WebApp" default="true" selected="false">
       <Host>localhost</Host>
@@ -757,7 +744,11 @@
       <created>1341913709316</created>
       <updated>1341913709316</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="Tests added, Structures completed.">
+      <created>1341930792058</created>
+      <updated>1341930792058</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TodoView" selected-index="0">
@@ -843,7 +834,7 @@
     <option name="SHOW_VCS_ERROR_NOTIFICATIONS" value="false" />
     <option name="FORCE_NON_EMPTY_COMMENT" value="false" />
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="false" />
-    <option name="LAST_COMMIT_MESSAGE" value="Other structures added." />
+    <option name="LAST_COMMIT_MESSAGE" value="Tests added, Structures completed." />
     <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="false" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_FILES_UP_TO_DATE_BEFORE_COMMIT" value="false" />
@@ -862,6 +853,7 @@
     <MESSAGE value="small fix" />
     <MESSAGE value="Now works only on user thread and single connection." />
     <MESSAGE value="Other structures added." />
+    <MESSAGE value="Tests added, Structures completed." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -883,53 +875,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/java/jchazelcast/JCListener.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="6" column="0" selection-start="135" selection-end="135" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/jchazelcast/JCMapListener.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="29" column="63" selection-start="1103" selection-end="1103" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/jchazelcast/JCSerial.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="14" column="24" selection-start="393" selection-end="393" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/jchazelcast/JCMap.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="435" column="53" selection-start="16765" selection-end="16765" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/jchazelcast/JCList.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="24" column="58" selection-start="679" selection-end="679" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/jchazelcast/JCSet.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="1" column="0" selection-start="21" selection-end="21" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/jchazelcast/JCStruct.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="22" column="0" selection-start="512" selection-end="512" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/jchazelcast/JCAtomicNumber.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="44" column="50" selection-start="1379" selection-end="1379" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/jchazelcast/JCMultiMap.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="53" column="9" selection-start="1685" selection-end="1685" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/jchazelcast/JCIDGenerator.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="9" column="47" selection-start="221" selection-end="221" vertical-scroll-proportion="0.0">
@@ -937,47 +882,110 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/jchazelcast/JCResponse.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/jchazelcast/JCList.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="35" column="0" selection-start="890" selection-end="890" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/jchazelcast/JCConnection.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="211" column="0" selection-start="6284" selection-end="6284" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/jchazelcast/JCCountDownLatch.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="33" column="31" selection-start="948" selection-end="948" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/jchazelcast/JCHazelcast.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="115" column="46" selection-start="3087" selection-end="3087" vertical-scroll-proportion="0.0">
+        <state line="3" column="0" selection-start="23" selection-end="23" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/jchazelcast/JCLock.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="50" column="36" selection-start="1460" selection-end="1460" vertical-scroll-proportion="0.0">
+        <state line="3" column="0" selection-start="23" selection-end="23" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/jchazelcast/JCMapEntry.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="5" column="0" selection-start="60" selection-end="60" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/jchazelcast/JCMultiMap.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="3" column="0" selection-start="23" selection-end="23" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/jchazelcast/JCProtocol.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="3" column="13" selection-start="36" selection-end="36" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/jchazelcast/JCSerial.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="5" column="13" selection-start="55" selection-end="55" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/jchazelcast/JCSet.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="2" column="13" selection-start="35" selection-end="35" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/jchazelcast/JCStruct.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="4" column="13" selection-start="37" selection-end="37" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/jchazelcast/JCResponse.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="7" column="13" selection-start="90" selection-end="90" vertical-scroll-proportion="0.20944558">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/jchazelcast/JCMap.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="461" column="0" selection-start="17826" selection-end="17826" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/jchazelcast/JCHazelcast.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="45" column="0" selection-start="1225" selection-end="1225" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/jchazelcast/JCMapListener.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="20" column="0" selection-start="702" selection-end="702" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/jchazelcast/JCListener.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="9" column="0" selection-start="206" selection-end="206" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/jchazelcast/JCConnection.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="208" column="35" selection-start="6281" selection-end="6281" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/test/java/jchazelcast/testAuth.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="191" column="19" selection-start="6158" selection-end="6158" vertical-scroll-proportion="1.3384956">
+        <state line="81" column="36" selection-start="2315" selection-end="2315" vertical-scroll-proportion="1.9282701">
           <folding>
-            <element signature="e#5731#5952#0" expanded="true" />
-            <element signature="e#5941#5942#0" expanded="true" />
+            <element signature="e#1843#2079#0" expanded="true" />
+            <element signature="e#2068#2069#0" expanded="true" />
           </folding>
         </state>
       </provider>

@@ -3,13 +3,8 @@ package jchazelcast;
 import java.util.Collection;
 import java.util.List;
 
-/**
- * Created with IntelliJ IDEA.
- * User: user
- * Date: 04.07.2012
- * Time: 12:34
- * To change this template use File | Settings | File Templates.
- */
+
+
 public class JCResponse {
         String responseLine;
         Collection<Object> data;

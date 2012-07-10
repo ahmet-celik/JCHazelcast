@@ -1,12 +1,7 @@
 package jchazelcast;
 
-/**
- * Created with IntelliJ IDEA.
- * User: user
- * Date: 10.07.2012
- * Time: 17:14
- * To change this template use File | Settings | File Templates.
- */
+
+
 public class JCLock extends JCStruct{
     protected JCLock(String name, JCConnection connection) {
         super(name, connection);

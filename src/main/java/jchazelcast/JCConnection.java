@@ -105,7 +105,7 @@ public class JCConnection {
         sendOp(commandLine,data);
     }
 
-    void sendOp(String commandLine,byte[]... data) {
+    private void sendOp(String commandLine,byte[]... data) {
         try{
             outputStream.write(commandLine.getBytes(CHARSET));
             outputStream.write('#');
@@ -187,27 +187,8 @@ public class JCConnection {
     }
 
 
-//    Response readResponse() throws IOException, ClassNotFoundException {
-//        List<Object> values = new ArrayList<Object>();
-//        String responseLine = readLine();
-//        String[] split = responseLine.split(" ");
-//        if ( split[split.length - 1].startsWith("#")) {
-//            int count = Integer.parseInt(split[split.length - 1].substring(1));
-//            if(count>0){
-//                String sizeLine = readLine();
-//                String[] tokens = sizeLine.split(" ");
-//
-//                for (int i = 0; i < count; i++) {
-//                    values.add(JCSerial.deserialize(readData(Integer.parseInt(tokens[i]))));
-//                }
-//                readData(2); //read CRLF
-//            }
-//        }
-//
-//        return new Response(responseLine,values);
-//    }
 
-     public JCResponse readResponse()  {
+     JCResponse readResponse()  {
          String responseLine = readLine();
          String[] split = responseLine.split(" ");
          int count=0;

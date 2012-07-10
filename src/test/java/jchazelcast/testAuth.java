@@ -31,23 +31,50 @@ public class testAuth {
     }
 
     @Test
-    public  void latestTest()  {
-        Map map = new HashMap();
-        map.put("key","data");
-        map.put("key2","data2");
-        map.put("key3","data3");
+    public  void mapTest()  {
+        mapPutAll("ahmet");
         JCMap m = clientPool.get(0).getMap("ahmet");
-        System.out.println("result***"+m.putAll("putall", false, map));
         System.out.println("result***" + m.put("put", false, "key3", "data4"));
 //        clientPool.get(0).destroy("dest","ahmet","map");
+
+
         m=clientPool.get(0).getMap("ahmet");
 //        System.out.println(clientPool.get(0).members("mem"));
 //        System.out.println(clientPool.get(0).partitions("par"));
  //       System.out.println(clientPool.get(0).txnBegin("beg"));
         System.out.println(m.put("put", false, "key", "myobj"));
-        System.out.println(m.putAll("all", false, map));
         System.out.println("not yet");
 //        clientPool.get(0).txnCommit("com");
+
+    }
+
+    public void mapPutAll(String name){
+        Map map = new HashMap();
+        map.put("key","data");
+        map.put("key2","data2");
+        map.put("key3","data3");
+        JCMap m = clientPool.get(0).getMap(name);
+        System.out.println(name+"*** "+m.putAll("putall", false, map));
+    }
+
+
+    @Test
+    public void listenerTest() throws InterruptedException {
+       mapPutAll("a");
+        JCMap<String,String> m =  clientPool.get(0).getMap("a");
+        boolean wait =true;
+        (new Thread(new Runnable() {
+            @Override
+            public void run() {
+                 JCMap<String,String> mp =  clientPool.get(1).getMap("a");
+                  mp.addMapListener(new MyListener("ahmet"),true);
+            }
+        })).start();
+        Thread.sleep(2000);
+        m.put("0",false,"key","data0");
+        m.put("0",false,"key4","dataX");
+        m.remove("0",false,"key");
+        m.evict("0",false,"key2");
 
 
     }
@@ -71,12 +98,15 @@ public class testAuth {
 
         @Override
         public void entryRemoved(Event e)  {
-                this.removeMapListener(e);
+            System.out.println(n+" listens(removed) "+e.getListenedStructureName()+" key: "+e.getKey()+" value: "+e.getValue());
+
         }
 
         @Override
         public void entryEvicted(Event e) {
-            //To change body of implemented methods use File | Settings | File Templates.
+            System.out.println(n+" listens(evict) "+e.getListenedStructureName()+" key: "+e.getKey()+" value: "+e.getValue());
+
+            this.removeMapListener(e);
         }
     }
 
