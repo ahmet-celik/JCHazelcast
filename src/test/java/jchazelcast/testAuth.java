@@ -4,6 +4,7 @@ import com.hazelcast.core.Hazelcast;
 import org.junit.*;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -12,34 +13,41 @@ public class testAuth {
     public static ArrayList<JCHazelcast> clientPool=new ArrayList<JCHazelcast>();
 
     @BeforeClass
-    public static void init() throws Exception {
+    public static void init()  {
         Hazelcast.getCluster();
     }
 
     @AfterClass
-    public static void cleanup() throws Exception {
+    public static void cleanup() {
         Hazelcast.shutdownAll();
     }
 
 
 
    @Before
-    public void connect() throws Exception {
+    public void connect() {
         for(int i=0;i<NUM;i++)
             clientPool.add(new JCHazelcast());
     }
 
     @Test
-    public  void latestTest() throws IOException, ClassNotFoundException, InterruptedException {
+    public  void latestTest()  {
         Map map = new HashMap();
         map.put("key","data");
         map.put("key2","data2");
         map.put("key3","data3");
         JCMap m = clientPool.get(0).getMap("ahmet");
         System.out.println("result***"+m.putAll("putall", false, map));
-//        for(Object o: m.getAll("getall",map.keySet()).toArray())
-//            System.out.println(o);
-        System.out.println("result***"+m.put("put", false, "key3", "data4"));
+        System.out.println("result***" + m.put("put", false, "key3", "data4"));
+//        clientPool.get(0).destroy("dest","ahmet","map");
+        m=clientPool.get(0).getMap("ahmet");
+//        System.out.println(clientPool.get(0).members("mem"));
+//        System.out.println(clientPool.get(0).partitions("par"));
+ //       System.out.println(clientPool.get(0).txnBegin("beg"));
+        System.out.println(m.put("put", false, "key", "myobj"));
+        System.out.println(m.putAll("all", false, map));
+        System.out.println("not yet");
+//        clientPool.get(0).txnCommit("com");
 
 
     }
@@ -51,7 +59,7 @@ public class testAuth {
         }
 
         @Override
-        public void entryUpdated(Event e) throws IOException, ClassNotFoundException, InterruptedException {
+        public void entryUpdated(Event e)  {
             System.out.println(n+" listens(updated) "+e.getListenedStructureName()+" key: "+e.getKey()+" value: "+e.getValue());
 
         }
@@ -62,7 +70,7 @@ public class testAuth {
         }
 
         @Override
-        public void entryRemoved(Event e) throws IOException, ClassNotFoundException, InterruptedException {
+        public void entryRemoved(Event e)  {
                 this.removeMapListener(e);
         }
 
@@ -73,7 +81,7 @@ public class testAuth {
     }
 
     @Test
-    public void perf() throws IOException, InterruptedException,ClassNotFoundException {
+    public void perf() throws InterruptedException {
         JCMap map = clientPool.get(0).getMap("ahmet");
         map.put("flag",false, "1","istanbul");
         Thread.sleep(2000);
@@ -87,16 +95,52 @@ public class testAuth {
             }
         }, 1000, 1000);
         for (; ; ) {
-            map.put("flag",false, "1","istanbul");
+            map.set("flag",0,false, "1","Stanbul");
             c.incrementAndGet();
         }
     }
 
+
     @Test
-    public void binaryTest() throws IOException, ClassNotFoundException {
+    public void perf2() throws InterruptedException {
+        JCAtomicNumber a1 = clientPool.get(0).getAtomicNumber("1");
+        a1.addAndGet("x",15);
+        Thread.sleep(2000);
+        final AtomicInteger c = new AtomicInteger(0);
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                int current = c.getAndSet(0);
+                System.out.println("* "+current + " ops per second");
+            }
+        }, 1000, 1000);
+        for (; ; ) {
+            a1.compareAndSet("0", 15, 15);
+            c.incrementAndGet();
+        }
+    }
+
+
+    @Test
+    public void binaryTest() throws UnsupportedEncodingException {
         byte[] b = JCSerial.serialize("ahmetç") ;
         char[] c =   (new String(b)).toCharArray();
         System.out.println(JCSerial.deserialize((new String(c)).getBytes("UTF-16")));
+    }
+
+    @Test
+    public  void atomicTest(){
+       JCAtomicNumber a1 = clientPool.get(0).getAtomicNumber("1");
+        JCAtomicNumber a2 = clientPool.get(0).getAtomicNumber("2");
+
+        System.out.println(a1.addAndGet("0", 15));
+        System.out.println(a1.getAndAdd("1",5));
+        System.out.println(a1.compareAndSet("2",20,0));
+        System.out.println(a2.getAndAdd("7", 5));
+        System.out.println(a2.compareAndSet("3",5,8));
+        System.out.println(a2.getAndSet("4", 3));
+        System.out.println(a2.addAndGet("5", 10));
     }
 
 //    public static class Listener implements EntryListener{

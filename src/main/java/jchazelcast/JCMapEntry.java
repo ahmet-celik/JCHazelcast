@@ -22,7 +22,8 @@ public class JCMapEntry<K,V> implements MapEntry<K,V> {
     private long version;
     private boolean valid;
 
-    public JCMapEntry(K key, V value, long cost, long creationTime, long expirationTime, int hits, long lastAccessTime, long lastStoredTime, long lastUpdateTime, long version, boolean valid) {
+    public JCMapEntry(K key, V value, long cost, long creationTime, long expirationTime, int hits, long lastAccessTime,
+                      long lastStoredTime, long lastUpdateTime, long version, boolean valid) {
         this.key = key;
         this.value = value;
         this.cost = cost;

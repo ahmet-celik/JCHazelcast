@@ -15,10 +15,13 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/../../hazelcast/hazelcast-all/target/hazelcast-all-2.2.SNAPSHOT.jar!/" />
+          <root url="jar://$MODULE_DIR$/../../hazelcast-hazelcast-a125307/hazelcast/target/hazelcast-2.2.SNAPSHOT-tests.jar!/" />
+          <root url="jar://$MODULE_DIR$/../../hazelcast-hazelcast-a125307/hazelcast/target/hazelcast-2.2.SNAPSHOT.jar!/" />
         </CLASSES>
         <JAVADOC />
-        <SOURCES />
+        <SOURCES>
+          <root url="jar://$MODULE_DIR$/../../hazelcast-hazelcast-a125307/hazelcast/target/hazelcast-2.2.SNAPSHOT-sources.jar!/" />
+        </SOURCES>
       </library>
     </orderEntry>
   </component>

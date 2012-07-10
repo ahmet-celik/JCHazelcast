@@ -1,17 +1,11 @@
 package jchazelcast;
 
-import java.io.IOException;
-import java.util.*;
-import java.util.concurrent.CountDownLatch;
 
-abstract class  JCListener {
+public abstract class  JCListener {
     protected boolean stopListening;
     protected JCConnection connection;
 
-
-
-
-    public void startListening() throws IOException, ClassNotFoundException, InterruptedException {
+    protected void startListening()  {
         while(!stopListening){
                     JCResponse resp = connection.readResponse();
                     if(resp instanceof Event)
@@ -23,13 +17,13 @@ abstract class  JCListener {
 
     }
 
-   void stopListening() throws IOException {
+   protected void stopListening()  {
         stopListening =true;
     }
 
 
 
-     abstract void notifyEvent(Event e) throws IOException, ClassNotFoundException, InterruptedException;
+    protected abstract void notifyEvent(Event e) ;
 
 
 
