@@ -2,12 +2,24 @@ package jchazelcast;
 
 
 public abstract class JCMapListener extends JCListener {
-    public abstract void entryUpdated(Event e) ;
-    public abstract void entryAdded(Event e);
-    public abstract void entryRemoved(Event e) ;
-    public abstract void entryEvicted(Event e);
+    public abstract void entryUpdated(EntryEvent e) ;
+    public abstract void entryAdded(EntryEvent e);
+    public abstract void entryRemoved(EntryEvent e) ;
+    public abstract void entryEvicted(EntryEvent e);
 
-    protected void notifyEvent(Event e) {
+    protected void listenEntries()  {
+        while(!stopListening){
+            JCResponse resp = connection.readResponse();
+            if(resp.isEvent())
+                notifyEvent((EntryEvent) resp.toEvent(true));
+            else{
+                System.out.println(resp.responseLine);
+            }
+        }
+
+    }
+
+    protected void notifyEvent(EntryEvent e) {
         if(e.getEventType().equals("UPDATED"))
             entryUpdated(e);
         else if(e.getEventType().equals("ADDED"))
@@ -25,12 +37,16 @@ public abstract class JCMapListener extends JCListener {
         this.connection = connection;
         connection.sendOp("MADDLISTENER listener "  + mapName + " "+includeValue+ " false") ;
        if(connection.readResponse().responseLine.startsWith("OK")){
-           startListening();
+           listenEntries();
        } else
            throw new JCException("Could not start listening!");
     }
 
-    public void removeMapListener(Event e)  {
+    /**
+     * Removes  this listener for its map.
+     * @param e
+     */
+    public void removeMapListener(EntryEvent e)  {
         connection.sendOp("MREMOVELISTENER listener " + e.getListenedStructureName() + " " + false) ;
         if(connection.readResponse().responseLine.startsWith("OK"))
             stopListening();

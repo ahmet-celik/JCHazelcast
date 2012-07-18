@@ -193,7 +193,7 @@ public class JCConnection {
          String[] split = responseLine.split(" ");
          int count=0;
          List<Object> values = null;
-         if ( split[split.length - 1].charAt(0)=='#') {
+         if (  split[split.length - 1].charAt(0)=='#') {
              values = new ArrayList<Object>();
              count = Integer.parseInt(split[split.length - 1].substring(1));
              if(count>0){
@@ -203,19 +203,6 @@ public class JCConnection {
                      values.add(JCSerial.deserialize(readData(Integer.parseInt(tokens[i]))));
                  }
                  readData(2); //read CRLF
-             }
-             if(split[0].charAt(0)=='E'&& split[0].charAt(1)=='V'){ //event
-                 String eventType = split[4];
-                 boolean inc= (count > 1);
-                 if(inc){
-                     if(eventType.charAt(0)=='U'){      //updated
-                         return new Event(split[4],split[3],split[2],inc,values.get(0),values.get(1),values.get(2));
-                     }else{
-                         return new Event(split[4],split[3],split[2],inc,values.get(0),values.get(1));
-                     }
-                 }else{
-                     return new Event(split[4],split[3],split[2],inc,values.get(0));
-                 }
              }
          }
          return new JCResponse(responseLine,values);

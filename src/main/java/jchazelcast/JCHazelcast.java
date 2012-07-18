@@ -41,9 +41,10 @@ public class JCHazelcast{
             connection.connect();
             if(!connection.auth("AUTH_HZC",connection.getConfig().getUn(),connection.getConfig().getPw()))
                   throw new JCException("Wrong password or username");
-            structHandlers =  new ArrayList<Map<String, JCStruct>>(9) ;
+            int structCount = JCStruct.Type.values().length;
+            structHandlers =  new ArrayList<Map<String, JCStruct>>(structCount) ;
             int i=0;
-            while(i++<9)
+            while(i++<structCount)
                structHandlers.add(new HashMap<String, JCStruct>()) ;
 
     }
@@ -121,6 +122,9 @@ public class JCHazelcast{
         return (JCLock) getStruct(JCStruct.Type.LOCK,name);
     }
 
+    public JCQueue getQueue(String name){
+        return (JCQueue) getStruct(JCStruct.Type.QUEUE,name);
+    }
 
     private JCStruct getStruct(JCStruct.Type type,String name){
            JCStruct struct = structHandlers.get(type.ordinal()).get(name);
@@ -135,6 +139,7 @@ public class JCHazelcast{
                    case IDGENERATOR: struct = new JCIDGenerator(name,connection); break;
                    case COUNTDOWNLATCH: struct = new JCCountDownLatch(name,connection); break;
                    case LOCK: struct = new JCLock(name,connection); break;
+                   case QUEUE: struct = new JCQueue(name,connection); break;
                }
                structHandlers.get(type.ordinal()).put(name,struct);
                return struct;
@@ -142,69 +147,23 @@ public class JCHazelcast{
                return struct;
     }
 
-
-    //    private void  sendOp(String commandLine,Map data) throws IOException {
-//        outputStream.write(commandLine.getBytes(CHARSET));
-//        outputStream.write(NUMBER_SIGN);
-//        outputStream.write(("" + data.size()).getBytes());
-//        outputStream.write(END_OF_LINE);
-//        StringBuilder sb = new StringBuilder();
-//        for(Object key:data.keySet()){
-//            sb.append(""+key.length()+" ");
-//        }
-//        outputStream.write(sb.toString().getBytes());
-//        outputStream.write(END_OF_LINE);
-//        for(Object key:data.keySet(){
-//            outputStream.write(s.getBytes());
-//        }
-//        outputStream.write(END_OF_LINE);
-//        outputStream.flush();
-//    }
-
-
-
-//    private static final class ByteArrayWrapper {
-//        private final char[] data;
-//
-//        public ByteArrayWrapper(byte[] data) {
-//            if (data == null) {
-//                throw new NullPointerException();
-//            }
-//            this.data = data;
-//        }
-//
-//        public boolean equals(Object other) {
-//            return !(other instanceof ByteArrayWrapper) ? false : Arrays.equals(data, ((ByteArrayWrapper) other).data);
-//        }
-//
-//        public int hashCode() {
-//            return Arrays.hashCode(data);
-//        }
-//
-//        public String toString(){
-//            return new String(data);
-//        }
-//    }
-
-//
-//
-
     /**
      * Destroys this instance cluster-wide. Clears and releases all resources for this instance.
      * @param flag
      * @param name Name of data structure.
      * @param type Type of data structure.
      */
-    public void destroy(String flag,String name,String type) {
+    public boolean destroy(String flag,String name,String type) {
          connection.sendOp("DESTROY " + flag + " " + type + " " + name) ;
          String[] r =  connection.readResponse().responseLine.split(" ");
-         if(r[0].equals("OK")){
-               removeStruct(JCStruct.Type.valueOf(type),name);
-         }
+         if(r[0].equals("OK"))
+               return  removeStruct(JCStruct.Type.valueOf(type),name);
+         else
+               return  false;
     }
 
-    private void removeStruct(JCStruct.Type type,String name){
-         structHandlers.get(type.ordinal()).remove(name);
+    private boolean removeStruct(JCStruct.Type type,String name){
+          return structHandlers.get(type.ordinal()).remove(name)!=null;
     }
 
     /**

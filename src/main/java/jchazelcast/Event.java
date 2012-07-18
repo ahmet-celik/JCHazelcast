@@ -1,21 +1,20 @@
 package jchazelcast;
 
 
-public class Event<K,V>  extends JCResponse {
-    private String type;
-    private String name;
-    private String structure;
-    private boolean includeValue;
-    private K key;
-    private V newvalue;
-    private V oldvalue;
+public class Event  extends JCResponse {
+    protected  String type;
+    protected  String name;
+    protected  String structure;
+    protected  boolean includeValue;
+    protected  Object[] values;
 
-    public V getValue() {
-        return newvalue;
-    }
-
-    public K getKey() {
-        return key;
+    public Event(String type, String name, String structure, boolean includeValue, Object... values) {
+        super("EVENT");
+        this.type = type;
+        this.name = name;
+        this.structure = structure;
+        this.includeValue = includeValue;
+        this.values = values;
     }
 
     public String getEventType() {
@@ -30,33 +29,5 @@ public class Event<K,V>  extends JCResponse {
         return structure;
     }
 
-    public Event(String type,String name,String structure, boolean iV,  K key) {
-        super("EVENT");
-        this.type = type;
-        this.includeValue = iV;
-        this.name = name;
-        this.structure=structure;
-        this.key = key;
-    }
 
-    public Event(String type, String name,String structure,boolean iV,  K key, V value) {
-        super("EVENT");
-        this.type = type;
-        this.includeValue = iV;
-        this.name = name;
-        this.key = key;
-        this.newvalue= value;
-        this.structure=structure;
-    }
-
-    public Event(String type,String name,String structure, boolean iV,  K key, V newvalue, V oldvalue) {
-        super("EVENT");
-        this.type = type;
-        this.includeValue = iV;
-        this.name = name;
-        this.key = key;
-        this.newvalue = newvalue;
-        this.oldvalue = oldvalue;
-        this.structure=structure;
-    }
 }

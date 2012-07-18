@@ -1,5 +1,6 @@
 package jchazelcast;
 
+
 import java.util.Collection;
 import java.util.List;
 
@@ -17,7 +18,10 @@ public class JCResponse {
             this.data = data;
         }
 
-        public String toString(){
+    public JCResponse() {
+    }
+
+    public String toString(){
             return responseLine+"\r\n"+data;
         }
 
@@ -31,6 +35,10 @@ public class JCResponse {
                 return Boolean.valueOf(res[2]);
             else
                 return false;
+        }
+
+        boolean isEvent(){
+            return responseLine.charAt(0)=='E' && responseLine.charAt(1)=='V';
         }
 
         Object singleValueResponse(){
@@ -51,6 +59,11 @@ public class JCResponse {
         long longResponse(){
             String[] r =responseLine.split(" ");
             return r[0].charAt(0)=='O'? Long.valueOf(r[2]) : 0;
+        }
+
+        Event toEvent(boolean isMapEvent){
+            String[] r = responseLine.split(" ");
+            return isMapEvent ? new EntryEvent(r[4],r[3],r[2],data.size()>1,data.toArray()) : new ItemEvent(r[4],r[3],r[2],data.size()>1,data.toArray());
         }
 
 
