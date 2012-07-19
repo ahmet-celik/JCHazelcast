@@ -1,7 +1,5 @@
 package jchazelcast;
 
-import com.hazelcast.core.MapEntry;
-
 import java.util.*;
 
 public class JCMap<K,V> extends JCStruct {
@@ -206,14 +204,14 @@ public class JCMap<K,V> extends JCStruct {
      * The time values are long representation of java Date values.
      * @param flag
      * @param key
-     * @return MapEntry<K,V> object
+     * @return JCMapEntry<K,V> object
      */
-   public MapEntry<K,V> getEntry(String flag,K key)  {
+   public JCMapEntry<K,V> getEntry(String flag,K key)  {
        connection.sendOp("MGETENTRY " + flag + " " + name + " " , key) ;
        JCResponse res =   connection.readResponse();
        String[] split = res.responseLine.split(" ");
-       if(split[0].equals("OK") && split.length==10)
-          return new JCMapEntry(key,res.data.toArray()[0],Long.valueOf(split[1]),Long.valueOf(split[2]),Long.valueOf(split[3]),Integer.valueOf(split[4]),Long.valueOf(split[5]),Long.valueOf(split[6]),Long.valueOf(split[7]),Long.valueOf(split[8]),Boolean.valueOf(split[9]));
+       if(split[0].equals("OK") && split.length==12)
+          return new JCMapEntry(key,res.data.toArray()[0],Long.valueOf(split[2]),Long.valueOf(split[3]),Long.valueOf(split[4]),Integer.valueOf(split[5]),Long.valueOf(split[6]),Long.valueOf(split[7]),Long.valueOf(split[8]),Long.valueOf(split[9]),Boolean.valueOf(split[10]));
        else
         return null;
     }

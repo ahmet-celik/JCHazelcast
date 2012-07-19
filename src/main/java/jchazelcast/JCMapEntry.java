@@ -1,10 +1,6 @@
 package jchazelcast;
 
-import com.hazelcast.core.MapEntry;
-
-
-
-public class JCMapEntry<K,V> implements MapEntry<K,V> {
+public class JCMapEntry<K,V>  {
     private  K key;
     private  V value;
     private long cost;
@@ -32,62 +28,56 @@ public class JCMapEntry<K,V> implements MapEntry<K,V> {
         this.valid = valid;
     }
 
-    @Override
+   
     public K getKey() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return key;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
-    @Override
+   
     public V getValue() {
         return value;
     }
 
-    @Override
+   
     public long getCost() {
         return cost;
     }
 
-    @Override
+   
     public long getCreationTime() {
         return creationTime;
     }
 
-    @Override
+   
     public long getExpirationTime() {
         return expirationTime;
     }
-    @Override
+   
     public int getHits() {
         return hits;
     }
-    @Override
+   
     public long getLastAccessTime() {
         return lastAccessTime;
     }
 
-    @Override
+   
     public long getLastStoredTime() {
         return lastStoredTime;
     }
 
-    @Override
+   
     public long getLastUpdateTime() {
         return lastUpdateTime;
     }
 
-    @Override
+   
     public long getVersion() {
         return version;
     }
 
-    @Override
+   
     public boolean isValid() {
         return valid;
-    }
-
-    @Override
-    public V setValue(V value) {
-        this.value = value;
-        return value;
     }
 }

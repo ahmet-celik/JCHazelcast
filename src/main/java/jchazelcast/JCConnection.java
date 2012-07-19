@@ -74,6 +74,7 @@ public class JCConnection {
         }
     }
 
+    //again from xetorthio/jedis project.
     boolean isConnected() {
         return socket != null && socket.isBound() && !socket.isClosed()  && socket.isConnected()
                 && !socket.isInputShutdown() && !socket.isOutputShutdown();
@@ -127,7 +128,7 @@ public class JCConnection {
         }
     }
 
-
+    //following three private method is modified version of methods in github project: xetorthio/jedis
     private byte[] readData(int len)  {
         byte[] buffer = new byte[len];
         int remained =len;

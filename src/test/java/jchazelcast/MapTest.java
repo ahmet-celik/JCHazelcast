@@ -4,13 +4,23 @@ package jchazelcast;
 import junit.framework.Assert;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 
-public class MapTest extends testAuth {
+public class MapTest extends Base {
     String f = "flag";
     boolean a = false;
+
+    @Test
+    public void mapPutAll(){
+        Map map = new HashMap();
+        map.put("key","data");
+        map.put("key2","data2");
+        map.put("key3","data3");
+        JCMap m = clientPool.get(0).getMap("ahmet");
+        Assert.assertTrue(m.putAll(f,a, map));
+    }
 
     @Test
     public void mapPut()  {
@@ -76,7 +86,7 @@ public class MapTest extends testAuth {
                 try {
                     cdl2.await();
                 } catch (InterruptedException e) {
-                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                    e.printStackTrace();
                 }
                 Assert.assertTrue(m.unlock(f, key));
                 cdl.countDown();
@@ -176,6 +186,72 @@ public class MapTest extends testAuth {
         Assert.assertTrue(m.flush(f,a));
 
     }
+
+    @Test
+    public void conditionals(){
+        JCMap m = clientPool.get(0).getMap("ahmet");
+        mapPut();
+        Assert.assertNull(m.replaceIfNotNull(f, a, "mis_key", "dat2"));
+        Assert.assertEquals(m.replaceIfNotNull(f, a, "key", "dat2"),"dat1");
+//        Assert.assertEquals(m.replaceIfSame(f,a,"key","dat1","dat3"),"dat2");
+//        Assert.assertEquals(m.replaceIfSame(f,a,"key","dat2","dat3"),"dat2");
+//        Assert.assertFalse(m.removeIfSame(f,a,"key","dat1"));
+//        Assert.assertTrue(m.removeIfSame(f,a,"key","dat3"));
+    }
+
+    @Test
+    public void listenerTest() throws InterruptedException {
+        mapPutAll();
+        JCMap<String,String> m =  clientPool.get(0).getMap("a");
+        cdl = new CountDownLatch(1);
+        (new Thread(new Runnable() {
+            @Override
+            public void run() {
+                JCMap<String,String> mp =  clientPool.get(1).getMap("a");
+                mp.addMapListener(new MyListener("ahmet"),true);
+            }
+        })).start();
+        cdl.await();
+        m.put("0",false,"key","data0");
+        m.put("0",false,"key4","dataX");
+        m.remove("0",false,"key");
+        m.evict("0",false,"key2");
+
+
+    }
+
+    public static class MyListener extends JCMapListener{
+        String n;
+        MyListener(String name){
+            n=name;
+        }
+
+        @Override
+        public void entryUpdated(EntryEvent e)  {
+            System.out.println(n+" listens(updated) "+e.getListenedStructureName()+" key: "+e.getKey()+" value: "+e.getValue());
+
+        }
+
+        @Override
+        public void entryAdded(EntryEvent e) {
+            System.out.println(n+" listens(added) "+e.getListenedStructureName()+" key: "+e.getKey()+" value: "+e.getValue());
+            this.removeMapListener(e);
+
+        }
+
+        @Override
+        public void entryRemoved(EntryEvent e)  {
+            System.out.println(n+" listens(removed) "+e.getListenedStructureName()+" key: "+e.getKey()+" value: "+e.getValue());
+
+        }
+
+        @Override
+        public void entryEvicted(EntryEvent e) {
+            System.out.println(n+" listens(evict) "+e.getListenedStructureName()+" key: "+e.getKey()+" value: "+e.getValue());
+
+        }
+    }
+
 
 
 
