@@ -1,14 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="969a7a9a-8abf-447e-ba12-0e64e6aed937" name="Default" comment="new test added">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/README.md" />
+    <list default="true" id="969a7a9a-8abf-447e-ba12-0e64e6aed937" name="Default" comment="Speed-up client operations by adding BufferedOutputStream.">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/hazelcast-java-client.iml" afterPath="$PROJECT_DIR$/hazelcast-java-client.iml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/jchazelcast/JCConnection.java" afterPath="$PROJECT_DIR$/src/main/java/jchazelcast/JCConnection.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/jchazelcast/JCMap.java" afterPath="$PROJECT_DIR$/src/main/java/jchazelcast/JCMap.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/jchazelcast/JCMapEntry.java" afterPath="$PROJECT_DIR$/src/main/java/jchazelcast/JCMapEntry.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/java/jchazelcast/MapTest.java" afterPath="$PROJECT_DIR$/src/test/java/jchazelcast/MapTest.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/java/jchazelcast/SimpleMapTest.java" afterPath="$PROJECT_DIR$/src/test/java/jchazelcast/SimpleMapTest.java" />
     </list>
     <ignored path="JavaClient.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -88,8 +85,8 @@
       <property name="field_breakpoints_groupByClasses" value="true" />
       <property name="method_breakpoints_groupByClasses" value="true" />
       <property name="exception_breakpoints_viewId" value="TABLE" />
-      <property name="field_breakpoints_viewId" value="TABLE" />
       <property name="exception_breakpoints_groupByClasses" value="true" />
+      <property name="field_breakpoints_viewId" value="TABLE" />
       <property name="method_breakpoints_groupByMethods" value="false" />
     </ui_properties>
   </component>
@@ -101,19 +98,10 @@
       <file leaf-file-name="MapTest.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/test/java/jchazelcast/MapTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="88" column="40" selection-start="2613" selection-end="2613" vertical-scroll-proportion="0.0">
+            <state line="12" column="20" selection-start="250" selection-end="250" vertical-scroll-proportion="0.0">
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="JCMap.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/jchazelcast/JCMap.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="418" column="18" selection-start="15988" selection-end="15988" vertical-scroll-proportion="0.0">
-              <folding />
             </state>
           </provider>
         </entry>
@@ -127,19 +115,28 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="hazelcast.xml" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/hazelcast.xml">
+      <file leaf-file-name="JCConnection.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/jchazelcast/JCConnection.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="1" column="18" selection-start="109" selection-end="109" vertical-scroll-proportion="0.0">
+            <state line="54" column="81" selection-start="1476" selection-end="1476" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="README.md" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/README.md">
+      <file leaf-file-name="JCSerial.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/jchazelcast/JCSerial.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="6" column="0" selection-start="95" selection-end="95" vertical-scroll-proportion="0.17770036">
+            <state line="5" column="13" selection-start="55" selection-end="55" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="SimpleMapTest.java" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/test/java/jchazelcast/SimpleMapTest.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="35" column="44" selection-start="1203" selection-end="1203" vertical-scroll-proportion="-1.2700348">
               <folding />
             </state>
           </provider>
@@ -149,9 +146,7 @@
         <entry file="file://$PROJECT_DIR$/src/test/java/jchazelcast/QueueTest.java">
           <provider selected="true" editor-type-id="text-editor">
             <state line="5" column="24" selection-start="101" selection-end="101" vertical-scroll-proportion="0.0">
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
+              <folding />
             </state>
           </provider>
         </entry>
@@ -169,11 +164,7 @@
         <entry file="file://$PROJECT_DIR$/src/test/java/jchazelcast/LockTest.java">
           <provider selected="true" editor-type-id="text-editor">
             <state line="7" column="0" selection-start="122" selection-end="122" vertical-scroll-proportion="0.0">
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#571#745#0" expanded="true" />
-                <element signature="e#734#735#0" expanded="true" />
-              </folding>
+              <folding />
             </state>
           </provider>
         </entry>
@@ -181,7 +172,7 @@
       <file leaf-file-name="Base.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/test/java/jchazelcast/Base.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="5" column="0" selection-start="80" selection-end="80" vertical-scroll-proportion="0.0">
+            <state line="2" column="0" selection-start="22" selection-end="22" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -213,22 +204,22 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/src/main/java/jchazelcast/JCQueue.java" />
         <option value="$PROJECT_DIR$/src/main/java/jchazelcast/JCStruct.java" />
         <option value="$PROJECT_DIR$/src/main/java/jchazelcast/ItemListener.java" />
         <option value="$PROJECT_DIR$/hazelcast.xml" />
         <option value="$PROJECT_DIR$/src/main/java/jchazelcast/JCHazelcast.java" />
-        <option value="$PROJECT_DIR$/src/test/java/jchazelcast/SimpleMapTest.java" />
         <option value="$PROJECT_DIR$/src/test/java/jchazelcast/testAuth.java" />
-        <option value="$PROJECT_DIR$/src/main/java/jchazelcast/JCConnection.java" />
         <option value="$PROJECT_DIR$/src/test/java/jchazelcast/AtomicNumberTest.java" />
         <option value="$PROJECT_DIR$/src/main/java/jchazelcast/JCMap.java" />
         <option value="$PROJECT_DIR$/src/main/java/jchazelcast/JCMapEntry.java" />
         <option value="$PROJECT_DIR$/src/test/java/jchazelcast/Base.java" />
         <option value="$PROJECT_DIR$/src/test/java/jchazelcast/QueueTest.java" />
         <option value="$PROJECT_DIR$/src/test/java/jchazelcast/LockTest.java" />
-        <option value="$PROJECT_DIR$/src/test/java/jchazelcast/MapTest.java" />
         <option value="$PROJECT_DIR$/README.md" />
+        <option value="$PROJECT_DIR$/src/test/java/jchazelcast/SimpleMapTest.java" />
+        <option value="$PROJECT_DIR$/src/main/java/jchazelcast/JCConnection.java" />
+        <option value="$PROJECT_DIR$/src/test/java/jchazelcast/MapTest.java" />
+        <option value="$PROJECT_DIR$/pom.xml" />
       </list>
     </option>
   </component>
@@ -316,6 +307,30 @@
       <sortByType />
     </navigator>
     <panes>
+      <pane id="PackagesPane">
+        <subPane>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="JavaClient" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="hazelcast-java-client" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewModuleNode" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
+      <pane id="Scope">
+        <subPane subId="Project Files">
+          <PATH>
+            <PATH_ELEMENT USER_OBJECT="Root">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -338,28 +353,56 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
-        </subPane>
-      </pane>
-      <pane id="Scope">
-        <subPane subId="Project Files">
-          <PATH>
-            <PATH_ELEMENT USER_OBJECT="Root">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-      </pane>
-      <pane id="PackagesPane">
-        <subPane>
           <PATH>
             <PATH_ELEMENT>
               <option name="myItemId" value="JavaClient" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="hazelcast-java-client" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewModuleNode" />
+              <option name="myItemId" value="JavaClient" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="test" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jchazelcast" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="JavaClient" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="JavaClient" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jchazelcast" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
@@ -368,22 +411,38 @@
   </component>
   <component name="PropertiesComponent">
     <property name="project.structure.last.edited" value="Modules" />
-    <property name="GoToFile.includeJavaFiles" value="false" />
-    <property name="OverrideImplement.combined" value="true" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth0" value="274" />
     <property name="project.structure.proportion" value="0.15" />
+    <property name="OverrideImplement.combined" value="true" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth1" value="292" />
     <property name="options.splitter.main.proportions" value="0.3" />
-    <property name="MemberChooser.sorted" value="false" />
-    <property name="options.lastSelected" value="MavenSettings" />
-    <property name="ChangesBrowser.SHOW_FLATTEN" value="true" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeWidth0" value="289" />
     <property name="recentsLimit" value="5" />
-    <property name="project.structure.side.proportion" value="0.2" />
-    <property name="MemberChooser.copyJavadoc" value="false" />
+    <property name="MemberChooser.sorted" value="false" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatOrder1" value="1" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatOrder0" value="0" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth2" value="294" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeWidth3" value="963" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth3" value="968" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeWidth2" value="289" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeWidth1" value="287" />
     <property name="GoToClass.toSaveIncludeLibraries" value="false" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatOrder2" value="2" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatOrder3" value="3" />
     <property name="MemberChooser.showClasses" value="true" />
     <property name="GoToClass.includeLibraries" value="false" />
+    <property name="options.splitter.details.proportions" value="0.2" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeOrder0" value="0" />
+    <property name="GoToFile.includeJavaFiles" value="false" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeOrder3" value="3" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeOrder1" value="1" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeOrder2" value="2" />
+    <property name="ChangesBrowser.SHOW_FLATTEN" value="true" />
+    <property name="options.lastSelected" value="MavenSettings" />
+    <property name="project.structure.side.proportion" value="0.2" />
+    <property name="MemberChooser.copyJavadoc" value="false" />
     <property name="dynamic.classpath" value="false" />
     <property name="options.searchVisible" value="true" />
-    <property name="options.splitter.details.proportions" value="0.2" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -396,29 +455,7 @@
       <recent name="D:\intelli\pro\JavaClient\src\test\java\jchazelcast" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.LockTest.locks">
-    <configuration default="false" name="MapTest.conditionals" type="JUnit" factoryName="JUnit" temporary="true">
-      <module name="hazelcast-java-client" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PACKAGE_NAME" value="jchazelcast" />
-      <option name="MAIN_CLASS_NAME" value="jchazelcast.MapTest" />
-      <option name="METHOD_NAME" value="conditionals" />
-      <option name="TEST_OBJECT" value="method" />
-      <option name="VM_PARAMETERS" value="-ea" />
-      <option name="PARAMETERS" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="ENV_VARIABLES" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <option name="TEST_SEARCH_SCOPE">
-        <value defaultName="moduleWithDependencies" />
-      </option>
-      <envs />
-      <patterns />
-      <RunnerSettings RunnerId="Run" />
-      <ConfigurationWrapper RunnerId="Run" />
-      <method />
-    </configuration>
+  <component name="RunManager" selected="Application.SimpleMapTest">
     <configuration default="false" name="QueueTest.queue" type="JUnit" factoryName="JUnit" temporary="true">
       <module name="hazelcast-java-client" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
@@ -507,6 +544,22 @@
       <ConfigurationWrapper RunnerId="Run" />
       <method />
     </configuration>
+    <configuration default="false" name="SimpleMapTest" type="Application" factoryName="Application" temporary="true">
+      <option name="MAIN_CLASS_NAME" value="jchazelcast.SimpleMapTest" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="ENABLE_SWING_INSPECTOR" value="false" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <module name="hazelcast-java-client" />
+      <envs />
+      <RunnerSettings RunnerId="Run" />
+      <ConfigurationWrapper RunnerId="Run" />
+      <method />
+    </configuration>
     <configuration default="true" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType" factoryName="Plugin">
       <module name="" />
       <option name="VM_PARAMETERS" value="-Xmx512m -Xms256m -XX:MaxPermSize=250m" />
@@ -527,6 +580,24 @@
       <method>
         <option name="AntTarget" enabled="false" />
         <option name="BuildArtifacts" enabled="false" />
+        <option name="Maven.BeforeRunTask" enabled="false" />
+      </method>
+    </configuration>
+    <configuration default="true" type="Applet" factoryName="Applet">
+      <module name="" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="HTML_FILE_NAME" />
+      <option name="HTML_USED" value="false" />
+      <option name="WIDTH" value="400" />
+      <option name="HEIGHT" value="300" />
+      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
+      <option name="VM_PARAMETERS" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <method>
+        <option name="AntTarget" enabled="false" />
+        <option name="BuildArtifacts" enabled="false" />
+        <option name="Make" enabled="true" />
         <option name="Maven.BeforeRunTask" enabled="false" />
       </method>
     </configuration>
@@ -555,24 +626,6 @@
       <envs />
       <properties />
       <listeners />
-      <method>
-        <option name="AntTarget" enabled="false" />
-        <option name="BuildArtifacts" enabled="false" />
-        <option name="Make" enabled="true" />
-        <option name="Maven.BeforeRunTask" enabled="false" />
-      </method>
-    </configuration>
-    <configuration default="true" type="Applet" factoryName="Applet">
-      <module name="" />
-      <option name="MAIN_CLASS_NAME" />
-      <option name="HTML_FILE_NAME" />
-      <option name="HTML_USED" value="false" />
-      <option name="WIDTH" value="400" />
-      <option name="HEIGHT" value="300" />
-      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
-      <option name="VM_PARAMETERS" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
       <method>
         <option name="AntTarget" enabled="false" />
         <option name="BuildArtifacts" enabled="false" />
@@ -625,11 +678,11 @@
       </method>
     </configuration>
     <list size="5">
-      <item index="0" class="java.lang.String" itemvalue="JUnit.MapTest.conditionals" />
-      <item index="1" class="java.lang.String" itemvalue="JUnit.QueueTest.queue" />
-      <item index="2" class="java.lang.String" itemvalue="JUnit.AtomicNumberTest.atomicTest" />
-      <item index="3" class="java.lang.String" itemvalue="JUnit.MapTest.listenerTest" />
-      <item index="4" class="java.lang.String" itemvalue="JUnit.LockTest.locks" />
+      <item index="0" class="java.lang.String" itemvalue="JUnit.QueueTest.queue" />
+      <item index="1" class="java.lang.String" itemvalue="JUnit.AtomicNumberTest.atomicTest" />
+      <item index="2" class="java.lang.String" itemvalue="JUnit.MapTest.listenerTest" />
+      <item index="3" class="java.lang.String" itemvalue="JUnit.LockTest.locks" />
+      <item index="4" class="java.lang.String" itemvalue="Application.SimpleMapTest" />
     </list>
     <configuration name="&lt;template&gt;" type="WebApp" default="true" selected="false">
       <Host>localhost</Host>
@@ -756,7 +809,7 @@
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <editor active="false" />
     <layout>
-      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32924107" sideWeight="0.49598286" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32924107" sideWeight="0.49598286" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="JetGradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24959828" sideWeight="0.6729911" order="4" side_tool="false" content_ui="tabs" />
@@ -764,7 +817,7 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32924107" sideWeight="0.5002672" order="10" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32924107" sideWeight="0.49599144" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32924107" sideWeight="0.38082486" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32924107" sideWeight="0.38082486" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32924107" sideWeight="0.49812934" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3292357" sideWeight="0.6707589" order="5" side_tool="false" content_ui="tabs" />
@@ -815,7 +868,7 @@
     <option name="SHOW_VCS_ERROR_NOTIFICATIONS" value="false" />
     <option name="FORCE_NON_EMPTY_COMMENT" value="false" />
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="false" />
-    <option name="LAST_COMMIT_MESSAGE" value="new test added" />
+    <option name="LAST_COMMIT_MESSAGE" value="Speed-up client operations by adding BufferedOutputStream." />
     <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="false" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_FILES_UP_TO_DATE_BEFORE_COMMIT" value="false" />
@@ -837,6 +890,7 @@
     <MESSAGE value="Tests added, Structures completed." />
     <MESSAGE value="readme added" />
     <MESSAGE value="new test added" />
+    <MESSAGE value="Speed-up client operations by adding BufferedOutputStream." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -858,122 +912,100 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="jar://$MAVEN_REPOSITORY$/junit/junit/4.10/junit-4.10.jar!/org/junit/internal/runners/model/ReflectiveCallable.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="11" column="40" selection-start="397" selection-end="397" vertical-scroll-proportion="0.34907597" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/jchazelcast/JCConnection.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="76" column="41" selection-start="2129" selection-end="2129" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://C:/glassfish3/jdk7/jre/lib/rt.jar!/java/util/Collection.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="11" column="12" selection-start="264" selection-end="264" vertical-scroll-proportion="0.33170733">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://C:/glassfish3/jdk7/jre/lib/rt.jar!/java/lang/System.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="5" column="19" selection-start="153" selection-end="153" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/test/java/jchazelcast/AtomicNumberTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="13" column="67" selection-start="339" selection-end="339" vertical-scroll-proportion="0.45609757">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
+        <state line="13" column="67" selection-start="339" selection-end="339" vertical-scroll-proportion="0.45609757" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/jchazelcast/JCAtomicNumber.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="37" column="19" selection-start="1121" selection-end="1121" vertical-scroll-proportion="0.33170733">
-          <folding />
-        </state>
+        <state line="37" column="19" selection-start="1121" selection-end="1121" vertical-scroll-proportion="0.33170733" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/jchazelcast/JCLock.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="16" column="19" selection-start="442" selection-end="442" vertical-scroll-proportion="0.33170733">
-          <folding />
-        </state>
+        <state line="16" column="19" selection-start="442" selection-end="442" vertical-scroll-proportion="0.33170733" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/jchazelcast/JCMap.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="418" column="18" selection-start="15988" selection-end="15988" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/jchazelcast/JCMapEntry.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="1" column="0" selection-start="21" selection-end="21" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/jchazelcast/MapTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="88" column="40" selection-start="2613" selection-end="2613" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
+        <state line="418" column="18" selection-start="15988" selection-end="15988" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/test/java/jchazelcast/QueueTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="5" column="24" selection-start="101" selection-end="101" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
+        <state line="5" column="24" selection-start="101" selection-end="101" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/jchazelcast/JCQueue.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="50" column="28" selection-start="1757" selection-end="1757" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
+        <state line="50" column="28" selection-start="1757" selection-end="1757" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/test/java/jchazelcast/LockTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="7" column="0" selection-start="122" selection-end="122" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#571#745#0" expanded="true" />
-            <element signature="e#734#735#0" expanded="true" />
-          </folding>
-        </state>
+        <state line="7" column="0" selection-start="122" selection-end="122" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/jchazelcast/Base.java">
+    <entry file="file://$PROJECT_DIR$/README.md">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="5" column="0" selection-start="80" selection-end="80" vertical-scroll-proportion="0.0">
+        <state line="6" column="0" selection-start="95" selection-end="95" vertical-scroll-proportion="0.17770036">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/hazelcast.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="1" column="18" selection-start="109" selection-end="109" vertical-scroll-proportion="0.0">
+        <state line="1" column="18" selection-start="109" selection-end="109" vertical-scroll-proportion="0.029616725">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/README.md">
+    <entry file="file://$PROJECT_DIR$/src/main/java/jchazelcast/JCMapEntry.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="6" column="0" selection-start="95" selection-end="95" vertical-scroll-proportion="0.17770036">
+        <state line="1" column="0" selection-start="21" selection-end="21" vertical-scroll-proportion="0.0" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/jchazelcast/JCConnection.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="54" column="81" selection-start="1476" selection-end="1476" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/jchazelcast/JCSerial.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="5" column="13" selection-start="55" selection-end="55" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/jchazelcast/Base.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="2" column="0" selection-start="22" selection-end="22" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/jchazelcast/MapTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="12" column="20" selection-start="250" selection-end="250" vertical-scroll-proportion="0.0">
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="10" column="9" selection-start="431" selection-end="431" vertical-scroll-proportion="0.29616725">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/jchazelcast/SimpleMapTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="35" column="44" selection-start="1203" selection-end="1203" vertical-scroll-proportion="-1.2700348">
           <folding />
         </state>
       </provider>

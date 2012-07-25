@@ -16,7 +16,7 @@ public class JCConnection {
     private String host ;
     private int port ;
     private Socket socket;
-    private OutputStream outputStream;
+    private BufferedOutputStream outputStream;
     private byte[] buf;
     private int current,max;
     private InputStream inputStream;
@@ -52,7 +52,7 @@ public class JCConnection {
                 socket.setSoLinger(true, 0);
                 socket.connect(new InetSocketAddress(host, port), timeout);
                 socket.setSoTimeout(timeout);
-                outputStream = socket.getOutputStream();
+                outputStream = new BufferedOutputStream(socket.getOutputStream());
                 inputStream = socket.getInputStream();
                 buf = new byte[JCProtocol.BUFFER_SIZE];
             } catch (IOException exception) {
