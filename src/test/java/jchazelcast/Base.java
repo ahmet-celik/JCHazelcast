@@ -34,7 +34,7 @@ public class Base {
     @Test
     public void perf() throws InterruptedException {
         JCMap map = clientPool.get(0).getMap("ahmet");
-        map.put("flag",false, "1","istanbul");
+        map.put(false, "1","istanbul");
         Thread.sleep(2000);
         final AtomicInteger c = new AtomicInteger(0);
         Timer timer = new Timer();
@@ -46,7 +46,7 @@ public class Base {
             }
         }, 1000, 1000);
         for (; ; ) {
-            map.set("flag",0,false, "1","Stanbul");
+            map.set(0,false, "1","Stanbul");
             c.incrementAndGet();
         }
     }
@@ -55,7 +55,7 @@ public class Base {
     @Test
     public void perf2() throws InterruptedException {
         JCAtomicNumber a1 = clientPool.get(0).getAtomicNumber("1");
-        a1.addAndGet("x",15);
+        a1.addAndGet(15);
         Thread.sleep(2000);
         final AtomicInteger c = new AtomicInteger(0);
         Timer timer = new Timer();
@@ -67,7 +67,7 @@ public class Base {
             }
         }, 1000, 1000);
         for (; ; ) {
-            a1.compareAndSet("0", 15, 15);
+            a1.compareAndSet( 15, 15);
             c.incrementAndGet();
         }
     }
@@ -75,9 +75,10 @@ public class Base {
 
     @Test
     public void binaryTest() throws UnsupportedEncodingException {
-        byte[] b = JCSerial.serialize("ahmetç") ;
+        JCSerial s = new JCSerial();
+        byte[] b = s.serialize("ahmetç") ;
         char[] c =   (new String(b)).toCharArray();
-        System.out.println(JCSerial.deserialize((new String(c)).getBytes("UTF-16")));
+        System.out.println(s.deserialize((new String(c)).getBytes("UTF-16")));
     }
 
 
@@ -88,22 +89,22 @@ public class Base {
    public void multiMapTest(){
         JCMultiMap<Integer,String> mm1= clientPool.get(0).getMultiMap("mm1");
 
-        System.out.println(mm1.put("0",false,18,"ali"));
-        System.out.println(mm1.put("1",false,18,"selen"));
-        System.out.println(mm1.put("2",false,21,"ali"));
-        System.out.println(mm1.valueCount("3",18));
-        System.out.println(mm1.removeValue("4",false,18,"selen"));
-        System.out.println(mm1.valueCount("5",18));
-        System.out.println(mm1.removeKey("6",false,21));
-        System.out.println(mm1.valueCount("7",21));
+        System.out.println(mm1.put(false,18,"ali"));
+        System.out.println(mm1.put(false,18,"selen"));
+        System.out.println(mm1.put(false,21,"ali"));
+//        System.out.println(mm1.valueCount(18));
+//        System.out.println(mm1.removeValue(false,18,"selen"));
+//        System.out.println(mm1.valueCount(18));
+//        System.out.println(mm1.removeKey(false,21));
+//        System.out.println(mm1.valueCount(21));
     }
 
     @Test
     public void idTest(){
         JCIDGenerator gen = clientPool.get(0).getIDGenerator("d");
-        System.out.println(gen.newID("3"));
-        System.out.println(gen.newID("3"));
-        System.out.println(gen.newID("3"));
+        System.out.println(gen.newID());
+        System.out.println(gen.newID());
+        System.out.println(gen.newID());
     }
 
     //does not work.
@@ -111,31 +112,37 @@ public class Base {
     public void cdl(){
         JCCountDownLatch cdl = clientPool.get(0).getCountDownLatch("l");
         final JCCountDownLatch cdl2 = clientPool.get(1).getCountDownLatch("l");
-        System.out.println("set "+cdl.setCount("3",2));
-        System.out.println("get " + cdl.getCount("0"));
-//        (new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                System.out.println("in "+cdl2.await("fl",5000));
-//                System.out.println("Now! It is time to ...");
-//            }
-//        })).start();
-//        System.out.println("dec " + cdl.countDown("2"));
-//        System.out.println("get "+cdl.getCount("0"));
-//        System.out.println("dec "+cdl.countDown("2"));
+        System.out.println("set "+cdl.setCount(2));
+        System.out.println("get " + cdl.getCount());
+        (new Thread(new Runnable() {
+            @Override
+            public void run() {
+                System.out.println("in "+cdl2.await(5000));
+                System.out.println("Now! It is time to ...");
+            }
+        })).start();
+        System.out.println("dec " + cdl.countDown());
+        System.out.println("get "+cdl.getCount());
+        System.out.println("dec "+cdl.countDown());
 
     }
 
     @Test
     public void ladd(){
         JCList<Integer> l = clientPool.get(0).getList("l");
-        System.out.println(l.add("d",false,4));
+        System.out.println(l.add(false,4));
     }
 
     @Test
     public void sadd(){
         JCSet<Integer> s = clientPool.get(0).getSet("2");
-        s.add("s",false,45);
+        System.out.println(s.add(false, 45));
+    }
+
+
+    @Test
+    public void itemListenTest(){
+
     }
 
     public static class MyItm extends ItemListener{

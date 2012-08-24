@@ -12,15 +12,6 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="Maven: junit:junit:4.10" level="project" />
     <orderEntry type="library" name="Maven: org.hamcrest:hamcrest-core:1.1" level="project" />
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/../../hazelcast-hazelcast-e73eeb7/hazelcast-all/target/hazelcast-all-2.2.SNAPSHOT.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
     <orderEntry type="module-library" scope="TEST">
       <library>
         <CLASSES>
@@ -28,6 +19,17 @@
         </CLASSES>
         <JAVADOC />
         <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/../../hazelcast-hazelcast-6c8727c/hazelcast-all/target/hazelcast-all-2.2.SNAPSHOT.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES>
+          <root url="jar://$MODULE_DIR$/../../hazelcast-hazelcast-6c8727c/hazelcast/target/hazelcast-2.2.SNAPSHOT-sources.jar!/" />
+        </SOURCES>
       </library>
     </orderEntry>
   </component>

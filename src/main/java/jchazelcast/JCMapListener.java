@@ -35,7 +35,7 @@ public abstract class JCMapListener extends JCListener {
 
     void addMapListener(String mapName,boolean includeValue,JCConnection connection) {
         this.connection = connection;
-        connection.sendOp("MADDLISTENER listener "  + mapName + " "+includeValue+ " false") ;
+        connection.sendOp("MADDLISTENER "  + mapName + " "+includeValue+ " false") ;
        if(connection.readResponse().responseLine.startsWith("OK")){
            listenEntries();
        } else
@@ -47,7 +47,7 @@ public abstract class JCMapListener extends JCListener {
      * @param e
      */
     public void removeMapListener(EntryEvent e)  {
-        connection.sendOp("MREMOVELISTENER listener " + e.getListenedStructureName() + " " + false) ;
+        connection.sendOp("MREMOVELISTENER " + e.getListenedStructureName() + " " + false) ;
         if(connection.readResponse().responseLine.startsWith("OK"))
             stopListening();
     }

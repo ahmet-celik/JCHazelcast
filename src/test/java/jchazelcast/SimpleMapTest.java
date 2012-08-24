@@ -17,7 +17,6 @@
 package jchazelcast;
 
 
-import com.hazelcast.core.Hazelcast;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -25,12 +24,12 @@ import java.util.concurrent.atomic.AtomicLong;
 
 public class SimpleMapTest {
 
-    public static int THREAD_COUNT = 40;
+    public static int THREAD_COUNT = 1;
     public static int ENTRY_COUNT = 10 * 1000;
     public static int VALUE_SIZE = 1000;
-    public static final int STATS_SECONDS = 1;
-    public static int GET_PERCENTAGE = 40;
-    public static int PUT_PERCENTAGE = 40;
+    public static final int STATS_SECONDS = 3;
+    public static int GET_PERCENTAGE = 0;
+    public static int PUT_PERCENTAGE = 100;
     final static Stats stats = new Stats();
 
     public static void main(String[] args) {
@@ -70,13 +69,13 @@ public class SimpleMapTest {
                         int key = (int) (Math.random() * ENTRY_COUNT);
                         int operation = ((int) (Math.random() * 100));
                         if (operation < GET_PERCENTAGE) {
-                            System.out.println(map.get("flag", String.valueOf(key)));
+                            map.get (String.valueOf(key));
                             stats.gets.incrementAndGet();
                         } else if (operation < GET_PERCENTAGE + PUT_PERCENTAGE) {
-                            System.out.println(map.put("flag",false,String.valueOf(key), new byte[VALUE_SIZE]));
+                            map.put(false,String.valueOf(key), new byte[VALUE_SIZE]);
                             stats.puts.incrementAndGet();
                         } else {
-                            map.remove("flag",false,String.valueOf(key));
+                            map.remove(false,String.valueOf(key));
                             stats.removes.incrementAndGet();
                         }
                     }

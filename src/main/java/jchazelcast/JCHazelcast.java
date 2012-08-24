@@ -11,6 +11,7 @@ public class JCHazelcast{
     private  List<Map<String,JCStruct>> structHandlers;
     private  JCConnection connection;
 
+
     public JCHazelcast(JCConfig cf)  {
         init(cf);
     }
@@ -39,7 +40,7 @@ public class JCHazelcast{
     void init(JCConfig jcConfig)  {
             connection = JCConnection.getConnection(jcConfig);
             connection.connect();
-            if(!connection.auth("AUTH_HZC",connection.getConfig().getUn(),connection.getConfig().getPw()))
+            if(!connection.auth(connection.getConfig().getUn(),connection.getConfig().getPw()))
                   throw new JCException("Wrong password or username");
             int structCount = JCStruct.Type.values().length;
             structHandlers =  new ArrayList<Map<String, JCStruct>>(structCount) ;
@@ -122,6 +123,11 @@ public class JCHazelcast{
         return (JCLock) getStruct(JCStruct.Type.LOCK,name);
     }
 
+    /**
+     * Return Queue from cluster with this name
+     * @param name
+     * @return
+     */
     public JCQueue getQueue(String name){
         return (JCQueue) getStruct(JCStruct.Type.QUEUE,name);
     }
@@ -149,17 +155,13 @@ public class JCHazelcast{
 
     /**
      * Destroys this instance cluster-wide. Clears and releases all resources for this instance.
-     * @param flag
      * @param name Name of data structure.
      * @param type Type of data structure.
      */
-    public boolean destroy(String flag,String name,String type) {
-         connection.sendOp("DESTROY " + flag + " " + type + " " + name) ;
+    public boolean destroy(String name,String type) {
+         connection.sendOp("DESTROY " + type + " " + name) ;
          String[] r =  connection.readResponse().responseLine.split(" ");
-         if(r[0].equals("OK"))
-               return  removeStruct(JCStruct.Type.valueOf(type),name);
-         else
-               return  false;
+        return r[0].equals("OK") ? removeStruct(JCStruct.Type.valueOf(type), name) : false;
     }
 
     private boolean removeStruct(JCStruct.Type type,String name){
@@ -168,48 +170,44 @@ public class JCHazelcast{
 
     /**
      * Starts the transaction. All subsequent commands will be queued until commit or rollback is sent.
-     * @param flag
      * @return true if op is OK.
      */
-    public boolean txnBegin(String flag) {
-        connection.sendOp("TRXBEGIN " + flag) ;
-        return connection.readResponse().responseLine.equals("OK "+flag) ;
+    public boolean txnBegin() {
+        connection.sendOp("TRXBEGIN ") ;
+        return connection.readResponse().responseLine.equals("OK ") ;
     }
 
     /**
      * Commits the transaction.
-     * @param flag
      * @return true if op is OK.
      */
-    public boolean txnCommit(String flag) {
-        connection.sendOp("TRXCOMMIT " + flag) ;
+    public boolean txnCommit() {
+        connection.sendOp("TRXCOMMIT ") ;
 
-        return connection.readResponse().responseLine.equals("OK "+flag) ;
+        return connection.readResponse().responseLine.equals("OK ") ;
     }
 
     /**
      * Rollbacks the transaction.
-     * @param flag
      * @return  true if op is OK.
      */
-    public boolean txnRollback(String flag) {
-        connection.sendOp("TRXROLLBACK " + flag) ;
+    public boolean txnRollback() {
+        connection.sendOp("TRXROLLBACK " ) ;
 
-        return connection.readResponse().responseLine.equals("OK "+flag) ;
+        return connection.readResponse().responseLine.equals("OK ") ;
     }
 
     /**
      * Returns all queue, map, set, list, topic, lock, multimap instances created by Hazelcast.
      * Instance of is defined with String type and String instance name.
-     * @param flag
      * @return  Collection of Instance objects.
      */
-    public Collection<Instance> instances(String flag)  {
-        connection.sendOp("INSTANCES " + flag) ;
+    public Collection<Instance> instances()  {
+        connection.sendOp("INSTANCES ") ;
         String[] r =  connection.readResponse().responseLine.split(" ");
-        if(r[0].equals("OK")&&r[1].equals(flag)){
+        if(r[0].equals("OK")){
                 List<Instance> list = new ArrayList<Instance>();
-                for(int i = 2;i<r.length;i++){
+                for(int i = 1;i<r.length;i++){
                      list.add(new Instance(r[i++],r[i++]));
                 }
                 return list;
@@ -247,15 +245,14 @@ public class JCHazelcast{
      * Collection of Strings that are name of current members in the cluster.
      * Every member in the cluster has the same member list in the same order.
      * First member is the oldest member.
-     * @param flag
      * @return  Collection of names.
      */
-    public Collection<String> members(String flag)  {
-        connection.sendOp("MEMBERS " + flag) ;
+    public Collection<String> members()  {
+        connection.sendOp("MEMBERS " ) ;
         String[] r = connection.readResponse().responseLine.split(" ");
-        if(r[0].equals("OK")&&r[1].equals(flag)){
+        if(r[0].equals("OK")){
             Collection<String> c = new ArrayList<String>();
-            for(int i = 2;i<r.length;i++){
+            for(int i = 1;i<r.length;i++){
                 c.add(r[i++]);
             }
             return c;
@@ -267,40 +264,37 @@ public class JCHazelcast{
      * Returns the cluster-wide time.
      * Cluster tries to keep a cluster-wide time which is might be different than the member's own
      * system time. Cluster-wide time is -almost- the same on all members of the cluster.
-     * @param flag
      * @return  Time
      */
-    public long clusterTime(String flag)  {
-        connection.sendOp("CLUSTERTIME " + flag) ;
+    public long clusterTime()  {
+        connection.sendOp("CLUSTERTIME ") ;
         String[] r =  connection.readResponse().responseLine.split(" ");
-        if(r[0].equals("OK")&&r[1].equals(flag)){
-            return Long.valueOf(r[2]);
+        if(r[0].equals("OK")){
+            return Long.valueOf(r[1]);
         }
         return -1;
     }
 
     /**
      * Pings the cluster. Will return OK.
-     * @param flag
      * @return
      */
-    public boolean ping(String flag)  {
-        connection.sendOp("PING " + flag) ;
-        return connection.readResponse().responseLine.equals("OK "+flag) ;
+    public boolean ping()  {
+        connection.sendOp("PING ") ;
+        return connection.readResponse().responseLine.equals("OK ") ;
     }
 
     /**
      * Return all partitions as a pair of partition id and member address that owns the partition.
      * Partition is class that defines a partition with its ID and address.
-     * @param flag
      * @return  Collection of Partition objects.
      */
-    public Collection<Partition> partitions(String flag) {
-        connection.sendOp("PARTITIONS " + flag + " ") ;
+    public Collection<Partition> partitions() {
+        connection.sendOp("PARTITIONS " ) ;
         String[] r = connection.readResponse().responseLine.split(" ");
-        if(r[0].equals("OK")&&r[1].equals(flag)){
+        if(r[0].equals("OK")){
             Collection<Partition> c = new ArrayList<Partition>();
-            for(int i = 2;i<r.length;i++){
+            for(int i = 1;i<r.length;i++){
                 c.add(new Partition(Long.valueOf(r[i++]),r[i++]));
             }
             return c;
@@ -310,15 +304,14 @@ public class JCHazelcast{
 
     /**
      * Return only the partition that the key falls
-     * @param flag
      * @param key
      * @return Partition object.
      */
-    public <K> Partition partitionOf(String flag,K key){
-        connection.sendOp("PARTITIONS " + flag + " ",key) ;
+    public <K> Partition partitionOf(K key){
+        connection.sendOp("PARTITIONS " ,key) ;
         String[] r = connection.readResponse().responseLine.split(" ");
-        if(r[0].equals("OK")&&r[1].equals(flag))
-            return new Partition(Long.valueOf(r[2]),r[3]);
+        if(r[0].equals("OK"))
+            return new Partition(Long.valueOf(r[1]),r[2]);
         else
             return null;
 
@@ -349,6 +342,7 @@ public class JCHazelcast{
                     '}';
         }
     }
+}
 //
 //    //MAP COMMANDS
 //
@@ -456,15 +450,3 @@ public class JCHazelcast{
 //
 //
 
-
-
-
-
-
-
-
-
-
-
-
-}

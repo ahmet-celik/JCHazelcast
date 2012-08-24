@@ -8,53 +8,53 @@ public class JCQueue<Item> extends JCStruct {
         super(name, connection);
     }
 
-    public boolean offer(String flag,boolean noreply,long timeout,Item item){
-        connection.sendOp("QOFFER "+flag+" "+name+" "+timeout+(noreply?" noreply ":" "),item);
+    public boolean offer(boolean noreply,long timeout,Item item){
+        connection.sendOp("QOFFER "+name+" "+timeout+(noreply?" noreply ":" "),item);
         return !noreply && connection.readResponse().booleanResponse();
     }
 
-    public boolean put(String flag,boolean noreply,Item item){
-        connection.sendOp("QPUT "+flag+" "+name+(noreply?" noreply ":" "),item);
+    public boolean put(boolean noreply,Item item){
+        connection.sendOp("QPUT "+name+(noreply?" noreply ":" "),item);
         return !noreply && connection.readResponse().isOK();
     }
 
-    public Item poll(String flag,long timeout){
-        connection.sendOp("QPOLL "+flag+" "+name+" "+timeout);
+    public Item poll(long timeout){
+        connection.sendOp("QPOLL "+name+" "+timeout);
         return (Item) connection.readResponse().singleValueResponse();
     }
 
-    public Item take(String flag){
-        connection.sendOp("QTAKE "+flag+" "+name);
+    public Item take(){
+        connection.sendOp("QTAKE "+name);
         return (Item) connection.readResponse().singleValueResponse();
     }
 
-    public int size(String flag){
-        connection.sendOp("QSIZE "+flag+" "+name);
+    public int size(){
+        connection.sendOp("QSIZE "+name);
         return (int) connection.readResponse().longResponse();
     }
 
-    public Item peek(String flag){
-        connection.sendOp("QPEEK "+flag+" "+name);
+    public Item peek(){
+        connection.sendOp("QPEEK "+name);
         return (Item) connection.readResponse().singleValueResponse();
     }
 
-    public boolean remove(String flag,boolean noreply,Item item){
-        connection.sendOp("QREMOVE "+flag+" "+name+(noreply?" noreply ":" "),item);
+    public boolean remove(boolean noreply,Item item){
+        connection.sendOp("QREMOVE "+name+(noreply?" noreply ":" "),item);
         return connection.readResponse().booleanResponse();
     }
 
-    public int remainingCapacity(String flag){
-        connection.sendOp("QREMCAPACITY "+flag+" "+name);
+    public int remainingCapacity(){
+        connection.sendOp("QREMCAPACITY "+name);
         return (int) connection.readResponse().longResponse();
     }
 
-    public Collection<Item> entries(String flag){
-        connection.sendOp("QENTRIES "+flag+" "+name);
+    public Collection<Item> entries(){
+        connection.sendOp("QENTRIES "+name);
         return (Collection<Item>) connection.readResponse().collectionResponse();
     }
 
     public void addListener(ItemListener listener ,boolean includeValue){
-         connection.sendOp("QADDLISTENER listener "+name+" "+includeValue);
+         connection.sendOp("QADDLISTENER "+name+" "+includeValue);
          listener.addItemListener(connection,"QREMOVELISTENER");
     }
 }
