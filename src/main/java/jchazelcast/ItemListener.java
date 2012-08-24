@@ -1,12 +1,6 @@
 package jchazelcast;
 
-/**
- * Created with IntelliJ IDEA.
- * User: user
- * Date: 11.07.2012
- * Time: 10:06
- * To change this template use File | Settings | File Templates.
- */
+
 public abstract class ItemListener extends JCListener {
     private String removeCommand;
 
@@ -45,7 +39,7 @@ public abstract class ItemListener extends JCListener {
     }
 
     public void removeListener(ItemEvent e)  {
-        connection.sendOp(removeCommand+" listener " + e.getListenedStructureName() + " " + false) ;
+        connection.sendOp(removeCommand+" " + e.getListenedStructureName() + " " + false) ;
         if(connection.readResponse().responseLine.startsWith("OK")){
             stopListening();
             System.out.println("STOPPED LISTENING: "+e.getListenedStructureName()+" name: "+e.name);

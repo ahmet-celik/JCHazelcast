@@ -10,13 +10,12 @@ public class JCList<V> extends JCStruct{
 
     /**
      * Appends the specified element to the end of this list.
-     * @param flag
      * @param noreply
      * @param item
      * @return true if op is OK.
      */
-    public boolean add(String flag,boolean noreply,V item){
-        connection.sendOp("LADD "+flag+" "+name+(noreply?" noreply ":" "), item);
+    public boolean add(boolean noreply,V item){
+        connection.sendOp("LADD "+name+(noreply?" noreply ":" "), item);
         return !noreply && connection.readResponse().isOK();
     }
 }

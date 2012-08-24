@@ -8,11 +8,10 @@ public class JCIDGenerator extends JCStruct{
 
     /**
      *  Generates a new cluster wide unique id.
-     * @param flag
      * @return the new generated id as long.
      */
-    public long newID(String flag){
-         connection.sendOp("NEWID "+flag+" "+name);
+    public long newID(){
+         connection.sendOp("NEWID "+name);
          return connection.readResponse().longResponse();
     }
 }

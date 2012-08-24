@@ -11,6 +11,7 @@ import static jchazelcast.JCProtocol.END_OF_LINE;
 
 
 public class JCConnection {
+    private JCSerial serial;
     private String un;
     private String pw;
     private String host ;
@@ -36,6 +37,7 @@ public class JCConnection {
 
 
     static JCConnection  getConnection(JCConfig cf){
+
         JCConnection jcConnection = new JCConnection();
         jcConnection.setConfig(cf);
         return jcConnection;
@@ -54,6 +56,7 @@ public class JCConnection {
                 socket.setSoTimeout(timeout);
                 outputStream = new BufferedOutputStream(socket.getOutputStream());
                 inputStream = socket.getInputStream();
+                serial = new JCSerial();
                 buf = new byte[JCProtocol.BUFFER_SIZE];
             } catch (IOException exception) {
                 throw new JCException("ERROR while connecting...",exception);
@@ -80,10 +83,10 @@ public class JCConnection {
                 && !socket.isInputShutdown() && !socket.isOutputShutdown();
     }
 
-    boolean auth(String flag,String username,String pass)  {
+    boolean auth(String username,String pass)  {
             sendOp(JCProtocol.ID);
-            sendOp("AUTH " + flag + " " + username + " " + pass);
-            return readResponse().responseLine.equals("OK "+flag);
+            sendOp("AUTH "  + username + " " + pass);
+            return readResponse().responseLine.startsWith("OK");
     }
 
     void sendOp(String commandLine) {
@@ -101,7 +104,7 @@ public class JCConnection {
         int len = objects.length;
         byte[][] data = new byte[len][];
         for(int i=0;i<len;i++){
-           data[i]=JCSerial.serialize(objects[i]);
+           data[i]=serial.serialize(objects[i]);
         }
         sendOp(commandLine,data);
     }
@@ -113,8 +116,9 @@ public class JCConnection {
             outputStream.write((""+data.length).getBytes());
             outputStream.write(END_OF_LINE);
             StringBuilder sb = new StringBuilder();
-            for(byte[] ba:data){
-                sb.append(""+ba.length+" ");
+            sb.append(data[0].length);
+            for(int i=1;i<data.length;i++){
+                sb.append(" "+data[i].length);
             }
             outputStream.write(sb.toString().getBytes());
             outputStream.write(END_OF_LINE);
@@ -201,7 +205,7 @@ public class JCConnection {
                  String[] tokens = readLine().split(" ");
 //                System.out.println(sizeLine);
                  for (int i = 0; i < count; i++) {
-                     values.add(JCSerial.deserialize(readData(Integer.parseInt(tokens[i]))));
+                     values.add(serial.deserialize(readData(Integer.parseInt(tokens[i]))));
                  }
                  readData(2); //read CRLF
              }

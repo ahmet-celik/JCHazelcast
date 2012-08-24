@@ -9,50 +9,46 @@ public class JCMultiMap<K,V> extends JCStruct{
 
     /**
      * Stores a key-value pair in the multimap.
-     * @param flag
      * @param noreply
      * @param key
      * @param value
      * @return  true if size of the multimap is increased.
      */
-    public boolean put(String flag,boolean noreply,K key,V value){
-        connection.sendOp("MMPUT "+flag+" "+name+(noreply?" noreply ":" "),key,value);
+    public boolean put(boolean noreply,K key,V value){
+        connection.sendOp("MMPUT "+name+(noreply?" noreply ":" "),key,value);
         return !noreply && connection.readResponse().booleanResponse();
     }
 
     /**
      * Remove all the values associated to the given key
-     * @param flag
      * @param noreply
      * @param key
      * @return  true if size of the multimap is changed after remove operation.
      */
-    public boolean removeKey(String flag,boolean noreply,K key){
-        connection.sendOp("MMREMOVE "+flag+" "+name+(noreply?" noreply ":" "),key);
+    public boolean removeKey(boolean noreply,K key){
+        connection.sendOp("MMREMOVE "+name+(noreply?" noreply ":" "),key);
         return !noreply && connection.readResponse().booleanResponse();
     }
 
     /**
      * Remove only the value associated to the given key
-     * @param flag
      * @param noreply
      * @param key
      * @param value
      * @return  true if size of the multimap is changed after remove operation.
      */
-    public boolean removeValue(String flag,boolean noreply,K key,V value){
-        connection.sendOp("MMREMOVE "+flag+" "+name+(noreply?" noreply ":" "),key,value);
+    public boolean removeValue(boolean noreply,K key,V value){
+        connection.sendOp("MMREMOVE "+name+(noreply?" noreply ":" "),key,value);
         return !noreply && connection.readResponse().booleanResponse();
     }
 
     /**
      *  Return number of values associated with the key.
-     * @param flag
      * @param key
      * @return  number of values.
      */
-    public int valueCount(String flag,K key){
-        connection.sendOp("MMVALUECOUNT "+flag+" "+name+" ",key);
+    public int valueCount(K key){
+        connection.sendOp("MMVALUECOUNT "+name+" ",key);
         return (int) connection.readResponse().longResponse();
 
     }
